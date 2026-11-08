@@ -10,6 +10,7 @@ import Reveal from "@/components/animations/Reveal";
 import Container from "@/components/shared/Container";
 import { localizedYear, projectCopy, useLocale } from "@/components/i18n/LocaleProvider";
 import type { WebsiteProject } from "@/lib/server/websiteProjects";
+import NovaHillsProjectCard from "@/components/projects/NovaHillsProjectCard";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -147,7 +148,8 @@ export default function Projects({ projects }: { projects: WebsiteProject[] }) {
             md:mt-24
           "
         >
-          {projects.map((project, index) => {
+          <NovaHillsProjectCard mode="home" />
+          {projects.filter((project) => project.slug !== "nova-hills-prime").map((project, index) => {
             const translated = projectCopy(project, locale);
             return (
             <article
@@ -191,7 +193,7 @@ export default function Projects({ projects }: { projects: WebsiteProject[] }) {
                         text-neutral-400
                       "
                     >
-                      {String(index + 1).padStart(2, "0")}
+                      {String(index + 2).padStart(2, "0")}
                     </span>
 
                     <span className="h-px w-8 bg-neutral-300" />
