@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { localizedYear, projectCopy, useLocale } from "@/components/i18n/LocaleProvider";
 import type { WebsiteProject } from "@/lib/server/websiteProjects";
+import NovaHillsProjectCard from "@/components/projects/NovaHillsProjectCard";
 
 export default function ProjectArchive({ projects, canEdit }: { projects: WebsiteProject[]; canEdit: boolean }) {
   const { locale, copy } = useLocale();
@@ -22,16 +23,17 @@ export default function ProjectArchive({ projects, canEdit }: { projects: Websit
       </section>
 
       <section className="border-y border-neutral-300 px-6 py-5 text-[9px] uppercase tracking-[.3em] text-neutral-400 sm:px-8 md:px-12 lg:px-16 xl:px-20">
-        {copy.publishedWork} · {projects.length} {projects.length === 1 ? copy.projectSingular : copy.projectPlural}
+        {copy.publishedWork} · {projects.filter((project) => project.slug !== "nova-hills-prime").length + 1} {projects.filter((project) => project.slug !== "nova-hills-prime").length + 1 === 1 ? copy.projectSingular : copy.projectPlural}
       </section>
 
       <section className="px-5 pb-32 pt-10 sm:px-8 md:px-10 lg:px-14 xl:px-16">
         <div className="border-t border-neutral-300">
-          {projects.map((project, index) => {
+          <NovaHillsProjectCard mode="archive" />
+          {projects.filter((project) => project.slug !== "nova-hills-prime").map((project, index) => {
             const translated = projectCopy(project, locale);
             return <Link key={project.id} href={`/projects/${project.slug}`} className="group block border-b border-neutral-300 py-8 md:py-12">
               <div className="mb-7 flex items-center justify-between gap-4 text-[8px] uppercase tracking-[.3em] text-neutral-400">
-                <span>{String(index + 1).padStart(2, "0")} · {translated.location}</span><span>{localizedYear(project.year, locale)}</span>
+                <span>{String(index + 2).padStart(2, "0")} · {translated.location}</span><span>{localizedYear(project.year, locale)}</span>
               </div>
               <div className="relative h-[58vh] min-h-[380px] overflow-hidden bg-neutral-200 md:h-[72vh]">
                 <Image src={project.image_url} alt={translated.title} fill priority={index === 0} sizes="100vw" className="object-cover transition-transform duration-[1400ms] group-hover:scale-[1.035]" />
