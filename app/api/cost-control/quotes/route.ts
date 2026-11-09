@@ -23,7 +23,7 @@ export async function POST(request:Request){
   const price=positive(body.unit_price_egp,"Unit price EGP");
   const delivery=nonnegative(body.delivery_egp_per_unit??0,"Delivery EGP per unit");
   const quotedAt=validDate(body.quoted_at,"Quotation date");
-  const validUntil=body.valid_until?validDate(body.valid_until,"Valid until"):null;
+  const validUntil=validDate(body.valid_until,"Valid until");
   if(validUntil&&validUntil<quotedAt)throw new Error("VALIDATION:Validity date precedes quotation");
   const source=requiredText(body.source_reference,"Supplier quotation reference",500);
   const {rows}=await query(`INSERT INTO qs_supplier_quotes(material_id,supplier_name,governorate,unit_price_egp,delivery_egp_per_unit,quoted_at,valid_until,source_reference,notes)
