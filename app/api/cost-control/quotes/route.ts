@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
+import { ensureQsReady } from "@/lib/server/qsBootstrap";
 import { requireServerUser,audit } from "@/lib/server/auth";
 import { query,withTransaction } from "@/lib/server/db";
 import { handleQsError,requiredText,boundedText,positive,nonnegative,validDate } from "@/lib/server/qsValidation";
 export const runtime="nodejs";export const dynamic="force-dynamic";
 export async function GET(request:Request){
  try{
-  await requireServerUser(["Owner","Manager","Engineer"]);
+  await requireServerUser(["Owner","Manager","Engineer"]); await ensureQsReady();
   const id=boundedText(new URL(request.url).searchParams.get("materialId"),80);
   const {rows}=await query(`SELECT q.*,m.code,m.name_ar,m.unit FROM qs_supplier_quotes q JOIN qs_materials m ON m.id=q.material_id
    WHERE ($1='' OR q.material_id::text=$1) ORDER BY q.created_at DESC LIMIT 500`,[id]);
@@ -14,7 +15,7 @@ export async function GET(request:Request){
 }
 export async function POST(request:Request){
  try{
-  const user=await requireServerUser(["Owner","Manager"]);
+  const user=await requireServerUser(["Owner","Manager"]); await ensureQsReady();
   const body=await request.json() as Record<string,unknown>;
   const materialId=requiredText(body.material_id,"Material",80);
   const supplier=requiredText(body.supplier_name,"Supplier",180);
@@ -33,7 +34,7 @@ export async function POST(request:Request){
 }
 export async function PATCH(request:Request){
  try{
-  const user=await requireServerUser(["Owner"]);
+  const user=await requireServerUser(["Owner"]); await ensureQsReady();
   const body=await request.json() as Record<string,unknown>;
   const id=requiredText(body.id,"Quotation ID",80);
   const status=requiredText(body.status,"Status",15);
