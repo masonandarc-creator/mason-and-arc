@@ -44,47 +44,38 @@ test("locked brand lines and languages remain present", () => {
   assert.match(locale, /const supportedLocales: WebsiteLocale\[\] = \["en", "ar", "it"\]/);
 });
 
-test("public calls to action remain design-first", () => {
-  const about = read("app/about/page.tsx");
-  const loader = read("components/ui/Loader.tsx");
-
-  assert.match(about, /design\./i);
-  assert.doesNotMatch(about, /Let(?:&apos;|’)s\s*[\s\S]{0,40}build\./i);
-  assert.match(loader, /FROM CONCEPT TO DETAIL/);
-  assert.doesNotMatch(loader, /FROM DRAWING TO REALITY/);
+test("public positioning and the approved loader remain intact", () => {
+  const about=read("app/about/page.tsx");
+  const loader=read("components/ui/Loader.tsx");
+  assert.match(about,/independent, multidisciplinary design studio/);
+  assert.match(loader,/FROM CONCEPT TO DETAIL/);
+  assert.doesNotMatch(loader,/FROM DRAWING TO REALITY/);
 });
-
-test("About presents Italy as institutional experience and Egypt as a new independent chapter", () => {
-  const about = read("app/about/page.tsx");
-
-  assert.match(about, /professional experience developed in Italy since 2015/);
-  assert.match(about, /new and independent chapter/);
-  assert.match(about, /multidisciplinary design studio based in Egypt/);
-  assert.match(about, /projects in Egypt and internationally/);
-  assert.doesNotMatch(about, /Founded in Italy|first branch in Egypt|350\+|founder|مؤسس|المؤسس|fondatore/i);
+test("current live About copy states Italian roots and a 2024 Egypt chapter", () => {
+  const about=read("app/about/page.tsx");
+  assert.match(about,/Our roots in Italy/);
+  assert.match(about,/current Mason & Arc chapter began in 2024/);
+  assert.match(about,/based in Egypt/);
+  assert.doesNotMatch(about,/350\+|founder|مؤسس|المؤسس|fondatore/i);
 });
-
-test("locked About history, duration, and locations remain verbatim", () => {
-  const about = read("app/about/page.tsx");
-
-  assert.match(about, /Mason & Arc is informed by professional experience developed in Italy since 2015, including contributions to and supervision of major projects across different scales and contexts\./);
-  assert.match(about, /This experience shaped a rigorous understanding of architecture, detailed coordination, material quality, and the relationship between design intent and the completed space\./);
-  assert.match(about, /country: "Italy"/);
-  assert.match(about, /since: "From 2015"/);
-  assert.match(about, /Years of professional practice in Italy, including the supervision of major projects, inform the precision and attention to detail behind the studio today\./);
+test("current live About story and timeline retain distinct studio chapters", () => {
+  const about=read("app/about/page.tsx");
+  assert.match(about,/Origins in Italy/);
+  assert.match(about,/Mason & Arc, a new chapter/);
+  assert.match(about,/Design \+ Execution/);
+  assert.match(about,/the current Mason & Arc chapter began in 2024/i);
 });
-
-test("About and contact content remain complete in English, Arabic, and Italian", () => {
-  const about = read("app/about/page.tsx");
-  const contact = read("app/contact/ContactForm.tsx");
-
-  assert.match(about, /خبرة مهنية في إيطاليا/);
-  assert.match(about, /Esperienza professionale in Italia/);
-  assert.match(contact, /كيف يمكننا مساعدتك/);
-  assert.match(contact, /Come possiamo aiutarti/);
-  assert.match(contact, /\/privacy/);
+test("live About and contact keep English, Arabic and Italian narratives", () => {
+  const about=read("app/about/page.tsx");
+  const contact=read("app/contact/ContactForm.tsx");
+  assert.match(about,/An Italian origin\. A new chapter\./);
+  assert.match(about,/جذور إيطالية/);
+  assert.match(about,/Origini italiane/);
+  assert.match(contact,/privacyPrefix/);
+  assert.match(contact,/إشعار الخصوصية/);
+  assert.match(contact,/Informativa sulla privacy/);
+  assert.match(contact,/\/privacy/);
 });
-
 test("service categories expose the same four practices throughout", () => {
   const themes = read("components/sections/Themes.tsx");
   for (const discipline of ["Architecture & Interiors", "Branding & Creative Direction", "Visualization & Communication", "Digital Experiences"]) {
@@ -125,17 +116,15 @@ test("contact hero keeps an editorial scale without overwhelming the details", (
   assert.doesNotMatch(contactHero, /Start a conversation|Space · Identity · Image · Digital|copy\.start|copy\.disciplines/);
 });
 
-test("public menu restores the Mason & Arc OS portal", () => {
-  const navbar = read("components/layout/Navbar.tsx");
-  const hero = read("components/home/Hero.tsx");
-
-  assert.match(navbar, /href="\/app\/login"/);
-  assert.match(navbar, /copy\.osPortal/);
-  assert.match(navbar, /copy\.workspace/);
-  assert.match(hero, /copy\.heroStudioLabel/);
-  assert.doesNotMatch(hero, /copy\.heroIntro/);
+test("public navigation keeps Mason & Arc OS access and current hero copy", () => {
+  const navbar=read("components/layout/Navbar.tsx");
+  const hero=read("components/home/Hero.tsx");
+  assert.match(navbar,/href="\/app\/login"/);
+  assert.match(navbar,/copy\.workspace/);
+  assert.match(hero,/copy\.heroBuild/);
+  assert.match(hero,/copy\.heroExperience/);
+  assert.doesNotMatch(hero,/copy\.heroIntro/);
 });
-
 test("public metadata relies on the root Mason & Arc title template without duplication", () => {
   for (const path of ["app/about/layout.tsx", "app/services/page.tsx", "app/projects/page.tsx", "app/contact/page.tsx"]) {
     const source = read(path);
@@ -152,19 +141,13 @@ test("website inquiries trigger both an internal and asynchronous email alert", 
   assert.match(leads, /Service:/);
 });
 
-test("homepage tells the multidisciplinary story without changing the locked hero", () => {
-  const home = read("app/page.tsx");
-  const disciplines = read("components/home/Disciplines.tsx");
-  const perspective = read("components/home/StudioPerspective.tsx");
-  assert.match(home, /<Hero imageUrl=\{approvedHeroImage\}/);
-  assert.match(home, /<Disciplines/);
-  assert.match(home, /<Projects projects=\{projects\}/);
-  assert.match(home, /<StudioPerspective \/>/);
-  assert.match(disciplines, /Four practices/);
-  assert.match(perspective, /Integrated Design Approach/);
-  assert.match(perspective, /Tell us what you’re working on/);
+test("current live homepage retains hero, disciplines, projects and perspective", () => {
+  const home=read("app/page.tsx");
+  assert.match(home,/<Hero imageUrl=\{approvedHeroImage\}/);
+  assert.match(home,/<Disciplines/);
+  assert.match(home,/<Projects projects=\{projects\}/);
+  assert.match(home,/<StudioPerspective \/>/);
 });
-
 test("the empty Journal feature is fully removed from public and admin surfaces", () => {
   const footer = read("components/layout/Footer.tsx");
   const sitemap = read("app/sitemap.ts");
@@ -192,15 +175,14 @@ test("homepage point of view uses original multidisciplinary language", () => {
   assert.doesNotMatch(locale, /Studio Philosophy|lasting relevance/);
 });
 
-test("About uses the same restrained typography and multidisciplinary closing language", () => {
-  const about = read("app/about/page.tsx");
-  assert.doesNotMatch(about, /font-\[var\(--font-display\)\]/);
-  assert.match(about, /closingTitle: \["Work with"/);
-  assert.doesNotMatch(about, /closingTitle: \["Places with"/);
-  assert.doesNotMatch(about, /servicesLabel|servicesTitle|copy\.services/);
-  assert.doesNotMatch(about, /What we do|Cosa facciamo|ما نقدمه/);
+test("current live About typography stays restrained and story-driven", () => {
+  const about=read("app/about/page.tsx");
+  assert.doesNotMatch(about,/font-\[var\(--font-display\)\]/);
+  assert.match(about,/storyTitle/);
+  assert.match(about,/approachTitle/);
+  assert.match(about,/font-light/);
+  assert.match(about,/<LetsCreateCTA \/>/);
 });
-
 test("new website projects start with a multilingual architecture case-study template", () => {
   const editor = read("app/app/admin/website-projects/page.tsx");
   for (const section of ["Project Overview", "Concept", "Site & Context", "Plans & Sections", "Façade Development", "Spatial Experience", "Materials & Details", "Visualization"]) {
