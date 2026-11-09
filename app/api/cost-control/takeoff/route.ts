@@ -31,3 +31,16 @@ export async function POST(request:Request){
  return NextResponse.json({data:{...rows[0],quantity:measured.net}},{status:201});
  }catch(e){return handleQsError(e);}
 }
+
+export async function DELETE(request:Request){
+ try{
+  const user=await requireServerUser(["Owner","Manager","Engineer"]);await ensureQsReady();
+  const id=requiredText(new URL(request.url).searchParams.get("id"),"Takeoff line",80);
+  const {rows}=await query(`DELETE FROM qs_takeoff_lines t USING qs_estimates e
+   WHERE t.id=$1 AND t.estimate_id=e.id AND e.status='Draft'
+   RETURNING t.id,t.estimate_id,t.activity_id`,[id]);
+  if(!rows.length)return NextResponse.json({error:"Line not found or estimate is locked"},{status:404});
+  await audit("qs.takeoff.deleted","QsTakeoff",rows[0].id,{actor:user.id,estimateId:rows[0].estimate_id});
+  return NextResponse.json({ok:true});
+ }catch(e){return handleQsError(e);}
+}
