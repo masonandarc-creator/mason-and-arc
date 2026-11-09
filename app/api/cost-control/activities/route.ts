@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
+import { ensureQsReady } from "@/lib/server/qsBootstrap";
 import { requireServerUser,audit } from "@/lib/server/auth";
 import { query } from "@/lib/server/db";
 import { handleQsError,requiredText,boundedText,positive,nonnegative,validDate } from "@/lib/server/qsValidation";
 export const runtime="nodejs";export const dynamic="force-dynamic";
 export async function GET(request:Request){
- try{await requireServerUser(["Owner","Manager","Engineer"]);
+ try{await requireServerUser(["Owner","Manager","Engineer"]); await ensureQsReady();
  const governorate=boundedText(new URL(request.url).searchParams.get("governorate"),80);
  const {rows}=await query(`SELECT a.*, (SELECT count(*)::int FROM qs_consumption_recipes r WHERE r.activity_id=a.id) AS recipe_count,
  l.id AS labor_quote_id,l.unit_rate_egp AS labor_rate_egp,
