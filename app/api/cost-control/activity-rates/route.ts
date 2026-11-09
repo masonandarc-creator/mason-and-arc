@@ -1,16 +1,17 @@
 import { NextResponse } from "next/server";
+import { ensureQsReady } from "@/lib/server/qsBootstrap";
 import { requireServerUser,audit } from "@/lib/server/auth";
 import { query,withTransaction } from "@/lib/server/db";
 import { handleQsError,requiredText,boundedText,nonnegative,validDate } from "@/lib/server/qsValidation";
 export const runtime="nodejs";export const dynamic="force-dynamic";
 export async function GET(){
- try{await requireServerUser(["Owner","Manager","Engineer"]);
+ try{await requireServerUser(["Owner","Manager","Engineer"]); await ensureQsReady();
  const {rows}=await query(`SELECT q.*,a.code,a.title_ar,a.unit FROM qs_activity_rate_quotes q JOIN qs_activities a ON a.id=q.activity_id ORDER BY q.created_at DESC LIMIT 500`);
  return NextResponse.json({data:rows},{headers:{"Cache-Control":"no-store"}});
  }catch(e){return handleQsError(e);}
 }
 export async function POST(request:Request){
- try{const user=await requireServerUser(["Owner","Manager"]);const b=await request.json() as Record<string,unknown>;
+ try{const user=await requireServerUser(["Owner","Manager"]); await ensureQsReady();const b=await request.json() as Record<string,unknown>;
  const act=requiredText(b.activity_id,"Activity",80),component=requiredText(b.component,"Component",20);
  if(!["Labor","Equipment"].includes(component))throw new Error("VALIDATION:Invalid component");
  const quotedAt=validDate(b.quoted_at,"Quotation date"),until=b.valid_until?validDate(b.valid_until,"Valid until"):null;
@@ -23,7 +24,7 @@ export async function POST(request:Request){
  }catch(e){return handleQsError(e);}
 }
 export async function PATCH(request:Request){
- try{const user=await requireServerUser(["Owner"]);const b=await request.json() as Record<string,unknown>;
+ try{const user=await requireServerUser(["Owner"]); await ensureQsReady();const b=await request.json() as Record<string,unknown>;
  const id=requiredText(b.id,"Quote ID",80),status=requiredText(b.status,"Status",20);
  if(!["Approved","Rejected"].includes(status))throw new Error("VALIDATION:Invalid status");
  const row=await withTransaction(async client=>{
