@@ -82,8 +82,8 @@ public static class ModelTakeoff
             .ToElements();
         foreach (var e in elements)
         {
-            if (e.Category is null || !Enum.IsDefined(typeof(BuiltInCategory), e.Category.Id.Value)) continue;
-            var cat = (BuiltInCategory)e.Category.Id.Value;
+            if (e.Category is null || e.Category.Id.Value < int.MinValue || e.Category.Id.Value > int.MaxValue) continue;
+            var cat = (BuiltInCategory)(int)e.Category.Id.Value;
             if (!Included.Contains(cat)) continue;
             if (result.Elements.Count >= 10000)
             {
