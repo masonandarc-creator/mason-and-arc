@@ -9,11 +9,11 @@ export function groupKey(category:string,name:string,materials:string[]):string;
 export type WallGroup={key:string;category:string;name:string;materials:string[];count:number;areaM2:number;volumeM3:number;missingArea:number;levels:{level:string;areaM2:number}[]};
 export type EstimatedWallGroup=WallGroup&{system:SystemChoice;plasterFaces:number;paintFaces:number;blocks:number|null;plasterAreaM2:number;paintAreaM2:number;drywallFaceAreaM2:number;mortarM3:number|null;cementBags:number|null;sandM3:number|null;paintLiters:number|null};
 export type RevitEstimate={
- title:string;exportedAtUtc:string;elementCount:number;groups:EstimatedWallGroup[];
+ title:string;exportedAtUtc:string;elementCount:number;settings:Settings;groups:EstimatedWallGroup[];
  levels:{level:string;masonryAreaM2:number;plasterAreaM2:number;paintAreaM2:number;glazingHostAreaM2:number;unmappedAreaM2:number}[];
  totals:{mappedWallAreaM2:number;unmappedWallAreaM2:number;glazingHostAreaM2:number;masonryAreaM2:number;drywallFaceAreaM2:number;blocks:number;plasterAreaM2:number;paintAreaM2:number;mortarM3:number;cementBags:number;sandM3:number;paintLiters:number};
  boq:{key:string;description:string;unit:string;quantity:number;unitPriceEGP:number|null;amountEGP:number|null;state:string}[];
- partialCostEGP:number;completeCostEstimate:boolean;missingRates:string[];status:{unmappedGroups:number;mappedGroups:number;missingAreaGroups:number;missingMaterialRates:string[]};disclaimers:string[];
+ partialCostEGP:number;completeCostEstimate:boolean;missingRates:string[];status:{unmappedGroups:number;mappedGroups:number;missingAreaGroups:number;missingBlockDimensions:number;missingMaterialRates:string[]};disclaimers:string[];
 };
 export function wallGroups(model:RevitModel):WallGroup[];
 export function calculateRevitEstimate(model:RevitModel,mappings?:Record<string,Mapping>,settings?:Partial<Settings>):RevitEstimate;
