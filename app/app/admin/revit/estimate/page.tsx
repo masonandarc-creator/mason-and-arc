@@ -30,9 +30,9 @@ async function getApi<T>(path:string):Promise<T>{const r=await fetch("/api/cost-
 function downloadBlob(blob:Blob,name:string){const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),500);}
 export default function RevitMaterialEstimatePage(){
  const [projects,setProjects]=useState<Project[]>([]),[projectId,setProjectId]=useState(""),[snapshotId,setSnapshotId]=useState(""),[snapshots,setSnapshots]=useState<Snapshot[]>([]);
- const [model,setModel]=useState<RevitModel|null>(null),[quality,setQuality]=useState<Snapshot["summary"] extends infer U?U:never>(undefined);
+ const [model,setModel]=useState<RevitModel|null>(null),[quality,setQuality]=useState<Snapshot["summary"]>(undefined);
  const [mappings,setMappings]=useState<Record<string,Mapping>>({}),[settings,setSettings]=useState<Settings>({...DEFAULT_ESTIMATE_SETTINGS});
- const [busy,setBusy]=useState(false),[error,setError]=useState(""),[showTechnical,setShowTechnical]=useState(false);
+ const [busy,setBusy]=useState(false),[error,setError]=useState("");
  useEffect(()=>{const params=new URLSearchParams(window.location.search);setProjectId(params.get("projectId")||"");setSnapshotId(params.get("snapshotId")||"");void listResource<Project>("projects",undefined,200).then(r=>{setProjects(r.data);setProjectId(p=>p||r.data[0]?.id||"");}).catch(e=>setError(e instanceof Error?e.message:"Could not load projects"));},[]);
  useEffect(()=>{if(!projectId){setSnapshots([]);return;}let active=true;void getApi<{data:Snapshot[]}>("snapshots?projectId="+encodeURIComponent(projectId)).then(r=>{if(active){setSnapshots(r.data);setSnapshotId(old=>r.data.some(s=>s.id===old)?old:r.data[0]?.id||"");}}).catch(e=>{if(active)setError(e instanceof Error?e.message:"Could not load snapshots")});return()=>{active=false;}},[projectId]);
  useEffect(()=>{if(!projectId||!snapshotId){setModel(null);return;}let active=true;setBusy(true);setError("");
