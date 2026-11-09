@@ -2,143 +2,192 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect } from "react";
 import { useLocale } from "@/components/i18n/LocaleProvider";
 
-const logo = "https://novahillseg.com/assets/logo-novahills-transparent.png";
-const identity = "https://novahillseg.com/assets/NOVA-HILLS-PRIME-brand-experience.png";
+const identity = "/images/projects/nova-hills/nova-hills-brand-experience.png";
 
 const words = {
   en: {
-    index: "MASON & ARC / INTEGRATED COLLABORATION 001",
-    discipline: "Brand identity · Digital · Architecture · Delivery",
+    index: "Case study / 001",
+    collaboration: "Integrated collaboration",
+    discipline: "Identity · Digital · Architecture · Interiors · Delivery",
     status: "Collaboration in progress",
-    subtitle: "A company identity, a digital presence, and a wider design-to-delivery partnership — developed with one coordinated point of view.",
-    overviewLabel: "01 / THE COLLABORATION",
+    subtitle: "A company identity, a digital presence and a wider design-to-delivery partnership — developed through one coordinated point of view.",
+    locationLabel: "Location",
+    sectorLabel: "Sector",
+    location: "Egypt",
+    sector: "Construction & real estate",
+    overviewLabel: "01 / The collaboration",
     overviewTitle: "One partner. Across disciplines.",
-    overview: "NOVA HILLS PRIME is a construction and real estate development business in Egypt. Mason & Arc's collaboration spans brand identity, website design and development, architectural design, interiors, and execution. The identity and website shown here are visible design work; architectural and on-site delivery work will be documented only as verified material becomes available.",
-    previewLabel: "02 / IDENTITY & DIGITAL",
-    previewTitle: "A brand built to be recognized.",
-    previewBody: "The original NOVA HILLS PRIME mark remains intact. Its restrained red, charcoal and light-neutral system carries through the digital experience, with clear hierarchy, bilingual content and a responsive presentation.",
-    scopeLabel: "03 / OUR ROLE",
-    scopeTitle: "An integrated scope.",
+    overview: "NOVA HILLS PRIME is a construction and real estate development business in Egypt. Mason&Arc’s collaboration spans brand identity, website design and development, architectural design, interiors and execution. The identity and website shown here are completed design work; architectural and on-site delivery will be documented as verified material becomes available.",
+    scopeLabel: "02 / Our role",
+    scopeTitle: "One connected scope.",
     stages: [
       ["01", "Brand identity", "Identity direction and consistent brand applications.", "Identity direction"],
-      ["02", "Website & digital", "Website design, bilingual experience and responsive implementation.", "Live website"],
-      ["03", "Architecture", "Architectural concept, planning and design development.", "Within collaboration scope"],
-      ["04", "Interiors", "Interior architecture, material thinking and detailing.", "Within collaboration scope"],
-      ["05", "Execution", "Delivery coordination, construction and site execution.", "Within collaboration scope"],
+      ["02", "Website & digital", "Bilingual experience, responsive design and implementation.", "Live website"],
+      ["03", "Architecture", "Architectural concept, planning and design development.", "In progress"],
+      ["04", "Interiors", "Interior architecture, material thinking and detailing.", "In progress"],
+      ["05", "Execution", "Delivery coordination, construction and site execution.", "In progress"],
     ],
-    proof: "Scope does not imply completion. Built-work photography and construction results will only be added when independently documented and approved for publication.",
+    proof: "The scope describes the collaboration, not unverified completion. Built-work photography and construction results will only be published after documentation and approval.",
     viewSite: "Visit the NOVA HILLS PRIME website",
     back: "All projects",
-    nextLabel: "HAVE A PROJECT IN MIND?",
-    nextTitle: "Let's create.",
+    nextLabel: "Have a project in mind?",
+    nextTitle: "Let’s create.",
     nextAction: "Start a conversation",
-    visualCaption: "NOVA HILLS PRIME — original brand artwork / design presentation."
+    visualCaption: "NOVA HILLS PRIME — identity system and digital experience."
   },
   ar: {
-    index: "MASON & ARC / التعاون المتكامل ٠٠١",
-    discipline: "الهوية البصرية · التجربة الرقمية · العمارة · التنفيذ",
+    index: "دراسة حالة / ٠٠١",
+    collaboration: "تعاون متكامل",
+    discipline: "الهوية · الموقع · العمارة · التصميم الداخلي · التنفيذ",
     status: "التعاون مستمر",
-    subtitle: "هوية شركة وحضور رقمي وشراكة أوسع في التصميم والتنفيذ، برؤية واحدة وتنسيق متكامل.",
+    subtitle: "هوية شركة وحضور رقمي وشراكة أوسع من التصميم إلى التنفيذ، برؤية واحدة وتنسيق متكامل.",
+    locationLabel: "الموقع",
+    sectorLabel: "القطاع",
+    location: "مصر",
+    sector: "المقاولات والتطوير العقاري",
     overviewLabel: "٠١ / التعاون",
     overviewTitle: "شريك واحد. تخصصات متكاملة.",
-    overview: "NOVA HILLS PRIME شركة مقاولات وتطوير عقاري في مصر. يشمل نطاق تعاون Mason & Arc تطوير الهوية البصرية وتصميم الموقع وتطويره، والتصميم المعماري والداخلي وأعمال التنفيذ. الأعمال المعروضة حاليًا توثق اتجاه الهوية والموقع الإلكتروني، وستضاف الأعمال المعمارية والمنفذة فقط عند توفر توثيق حقيقي معتمد.",
-    previewLabel: "٠٢ / الهوية والموقع",
-    previewTitle: "هوية واضحة وحضور متكامل.",
-    previewBody: "نحافظ على شعار NOVA HILLS PRIME الأصلي من دون تغيير، مع نظام بصري يعتمد الأحمر والرمادي الداكن والخلفيات الهادئة، وتسلسل بصري واضح وموقع متجاوب بلغتين.",
-    scopeLabel: "٠٣ / نطاق عملنا",
-    scopeTitle: "خدمات تحت رؤية واحدة.",
+    overview: "NOVA HILLS PRIME شركة مقاولات وتطوير عقاري في مصر. يشمل تعاون Mason&Arc تطوير الهوية البصرية وتصميم الموقع وتطويره، والتصميم المعماري والداخلي وأعمال التنفيذ. الأعمال المعروضة توثّق الهوية والتجربة الرقمية المكتملة، وستُضاف الأعمال المعمارية والمنفذة عند توفر توثيق حقيقي معتمد.",
+    scopeLabel: "٠٢ / نطاق عملنا",
+    scopeTitle: "نطاق واحد مترابط.",
     stages: [
       ["٠١", "الهوية البصرية", "توجيه الهوية وتطبيقاتها المتسقة.", "تطوير الهوية"],
-      ["٠٢", "الموقع والتجربة الرقمية", "تصميم وتطوير موقع متجاوب باللغتين.", "الموقع متاح"],
-      ["٠٣", "التصميم المعماري", "المفاهيم المعمارية والتخطيط وتطوير التصميم.", "ضمن نطاق التعاون"],
-      ["٠٤", "التصميم الداخلي", "تطوير الفراغات والخامات والتفاصيل.", "ضمن نطاق التعاون"],
-      ["٠٥", "التنفيذ", "تنسيق أعمال التسليم والمقاولات والتنفيذ بالموقع.", "ضمن نطاق التعاون"],
+      ["٠٢", "الموقع والتجربة الرقمية", "تجربة ثنائية اللغة وتصميم متجاوب وتنفيذ كامل.", "الموقع متاح"],
+      ["٠٣", "التصميم المعماري", "المفاهيم المعمارية والتخطيط وتطوير التصميم.", "قيد التطوير"],
+      ["٠٤", "التصميم الداخلي", "تطوير الفراغات والخامات والتفاصيل.", "قيد التطوير"],
+      ["٠٥", "التنفيذ", "تنسيق أعمال التسليم والمقاولات والتنفيذ بالموقع.", "قيد التطوير"],
     ],
-    proof: "نطاق المسؤولية لا يعني اكتمال التنفيذ. لن ننشر صور مبانٍ منفذة أو نتائج إنشائية إلا بعد توثيقها واعتماد نشرها.",
+    proof: "النطاق يصف التعاون ولا يعني اكتمال أعمال غير موثقة. لن تُنشر صور التنفيذ أو نتائج الموقع إلا بعد توثيقها واعتمادها.",
     viewSite: "زيارة موقع NOVA HILLS PRIME",
     back: "كل المشروعات",
     nextLabel: "عندك مشروع؟",
     nextTitle: "خلّينا نبدأ.",
     nextAction: "تواصل معنا",
-    visualCaption: "NOVA HILLS PRIME — تطبيق الهوية الأصلية وعرض التصميم."
+    visualCaption: "NOVA HILLS PRIME — نظام الهوية والتجربة الرقمية."
   },
   it: {
-    index: "MASON & ARC / COLLABORAZIONE INTEGRATA 001",
-    discipline: "Identità · Digitale · Architettura · Realizzazione",
+    index: "Case study / 001",
+    collaboration: "Collaborazione integrata",
+    discipline: "Identità · Digitale · Architettura · Interni · Realizzazione",
     status: "Collaborazione in corso",
     subtitle: "Identità aziendale, presenza digitale e collaborazione dal progetto alla realizzazione, con una visione coordinata.",
-    overviewLabel: "01 / LA COLLABORAZIONE",
+    locationLabel: "Luogo",
+    sectorLabel: "Settore",
+    location: "Egitto",
+    sector: "Costruzioni e sviluppo immobiliare",
+    overviewLabel: "01 / La collaborazione",
     overviewTitle: "Un partner. Più discipline.",
-    overview: "NOVA HILLS PRIME opera nelle costruzioni e nello sviluppo immobiliare in Egitto. La collaborazione con Mason & Arc comprende identità visiva, sito web, progettazione architettonica e d'interni e realizzazione. Qui sono presentati i lavori di identità e web; le fasi architettoniche e di cantiere saranno documentate solo con materiali verificati.",
-    previewLabel: "02 / IDENTITÀ E DIGITALE",
-    previewTitle: "Un'identità riconoscibile.",
-    previewBody: "Il marchio originale NOVA HILLS PRIME viene preservato. Rosso, antracite e toni chiari definiscono un sistema essenziale, applicato a un sito bilingue e responsive.",
-    scopeLabel: "03 / IL NOSTRO RUOLO",
-    scopeTitle: "Un incarico integrato.",
+    overview: "NOVA HILLS PRIME opera nelle costruzioni e nello sviluppo immobiliare in Egitto. La collaborazione con Mason&Arc comprende identità visiva, sito web, progettazione architettonica e d’interni e realizzazione. Qui sono presentati l’identità e il lavoro digitale completato; le fasi architettoniche e di cantiere saranno documentate con materiali verificati.",
+    scopeLabel: "02 / Il nostro ruolo",
+    scopeTitle: "Un incarico coordinato.",
     stages: [
       ["01", "Identità visiva", "Direzione e applicazioni coordinate del marchio.", "Direzione visiva"],
-      ["02", "Sito web", "Design e sviluppo responsive e bilingue.", "Sito online"],
-      ["03", "Architettura", "Concept, pianificazione e sviluppo progettuale.", "Nell'ambito dell'incarico"],
-      ["04", "Interni", "Spazi, materiali e dettagli.", "Nell'ambito dell'incarico"],
-      ["05", "Realizzazione", "Coordinamento, costruzione e attività in cantiere.", "Nell'ambito dell'incarico"],
+      ["02", "Sito web", "Esperienza bilingue, design responsive e sviluppo.", "Sito online"],
+      ["03", "Architettura", "Concept, pianificazione e sviluppo progettuale.", "In corso"],
+      ["04", "Interni", "Spazi, materiali e dettagli.", "In corso"],
+      ["05", "Realizzazione", "Coordinamento, costruzione e attività in cantiere.", "In corso"],
     ],
-    proof: "L'ambito dell'incarico non equivale a opere completate. Fotografie e risultati di cantiere saranno pubblicati solo dopo verifica.",
+    proof: "L’incarico descrive la collaborazione, non opere non verificate. Fotografie e risultati di cantiere saranno pubblicati solo dopo documentazione e approvazione.",
     viewSite: "Visita il sito NOVA HILLS PRIME",
     back: "Tutti i progetti",
-    nextLabel: "HAI UN PROGETTO?",
+    nextLabel: "Hai un progetto?",
     nextTitle: "Creiamo insieme.",
     nextAction: "Contattaci",
-    visualCaption: "NOVA HILLS PRIME — applicazioni del marchio originale."
+    visualCaption: "NOVA HILLS PRIME — sistema d’identità ed esperienza digitale."
   }
 } as const;
 
 export default function NovaHillsCaseStudy() {
   const { locale } = useLocale();
   const t = words[locale];
+  const isArabic = locale === "ar";
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
-    <main dir={locale === "ar" ? "rtl" : "ltr"} className="overflow-x-hidden bg-[#f7f6f3] text-[#1c2226]">
-      <section className="relative bg-[#161b20] px-6 pb-20 pt-36 text-white sm:px-10 md:pb-28 md:pt-44 lg:px-16">
-        <div className="mx-auto max-w-[1450px]">
-          <div className="flex flex-wrap items-center justify-between gap-5 text-[10px] uppercase tracking-[.25em] text-white/55">
-            <span>{t.index}</span>
-            <span className="border border-white/30 px-3 py-2">{t.status}</span>
+    <main dir={isArabic ? "rtl" : "ltr"} className="overflow-x-hidden bg-[#f4f2ed] text-[#171c20]">
+      <section className="relative bg-[#151b20] px-5 pb-16 pt-28 text-white sm:px-8 md:pb-24 md:pt-32 lg:px-16">
+        <div className="mx-auto max-w-[1480px]">
+          <div className="flex flex-col gap-5 border-y border-white/15 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <span className="text-[9px] uppercase tracking-[.23em] text-white/45">{t.index}</span>
+            <div className="flex items-center gap-3 text-[9px] uppercase tracking-[.23em] text-white/55">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#c51b29]" aria-hidden="true" />
+              <span>{t.status}</span>
+            </div>
           </div>
-          <div className="mt-16 grid items-end gap-16 lg:grid-cols-[1.15fr_.85fr]">
+
+          <div className="grid gap-12 pb-14 pt-14 lg:grid-cols-[1.3fr_.7fr] lg:items-end lg:pb-20 lg:pt-20">
             <div>
-              <p className="text-[11px] uppercase tracking-[.22em] text-[#b8c6cf]">{t.discipline}</p>
-              <h1 className="mt-7 max-w-[850px] font-light text-[clamp(3.4rem,9vw,9rem)] leading-[.86] tracking-[-.06em]">NOVA<br />HILLS PRIME<span className="text-[#b51220]">.</span></h1>
-              <p className="mt-10 max-w-xl text-[clamp(1.15rem,1.8vw,1.5rem)] font-light leading-relaxed text-white/65">{t.subtitle}</p>
+              <p className="text-[10px] uppercase tracking-[.24em] text-white/45">{t.discipline}</p>
+              <h1 dir="ltr" className={`mt-7 max-w-[980px] text-[clamp(4.15rem,10vw,10.5rem)] font-light leading-[.8] tracking-[-.065em] ${isArabic ? "text-right" : ""}`}>NOVA<br />HILLS PRIME<span className="text-[#c51b29]">.</span></h1>
             </div>
-            <div className="flex min-h-[260px] items-center justify-center border border-white/15 bg-[#232a30] p-12">
-              <Image src={logo} alt="Original NOVA HILLS PRIME logo" width={560} height={220} unoptimized sizes="(max-width: 1024px) 85vw, 40vw" className="h-auto max-h-[170px] w-full object-contain" />
+            <div className="border-t border-white/20 pt-6 lg:mb-1">
+              <p className="text-[10px] uppercase tracking-[.24em] text-white/40">{t.collaboration}</p>
+              <p className="mt-5 max-w-xl text-[clamp(1.05rem,1.45vw,1.35rem)] font-light leading-[1.7] text-white/65">{t.subtitle}</p>
+              <dl className="mt-8 grid grid-cols-2 gap-5 border-t border-white/10 pt-5 text-[9px] uppercase tracking-[.2em] text-white/35">
+                <div><dt>{t.locationLabel}</dt><dd className="mt-2 text-white/70">{t.location}</dd></div>
+                <div><dt>{t.sectorLabel}</dt><dd className="mt-2 text-white/70">{t.sector}</dd></div>
+              </dl>
             </div>
+          </div>
+
+          <figure>
+            <div className="relative aspect-[16/9] overflow-hidden border border-white/15 bg-[#0d1013]">
+              <Image src={identity} alt="NOVA HILLS PRIME identity system and website presentation" fill priority sizes="(max-width: 1536px) 100vw, 1480px" className="object-cover" />
+            </div>
+            <div className="flex flex-col gap-4 border-b border-white/15 py-5 sm:flex-row sm:items-center sm:justify-between">
+              <figcaption className="text-[9px] uppercase tracking-[.2em] text-white/40">{t.visualCaption}</figcaption>
+              <a href="https://novahillseg.com/" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-3 text-[10px] uppercase tracking-[.2em] text-white/70 transition-colors hover:text-white">{t.viewSite}<span aria-hidden="true" className="transition-transform group-hover:-translate-y-1 group-hover:translate-x-1">↗</span></a>
+            </div>
+          </figure>
+        </div>
+      </section>
+
+      <section className="px-5 py-24 sm:px-8 md:py-36 lg:px-16">
+        <div className="mx-auto grid max-w-[1480px] gap-12 lg:grid-cols-[.32fr_1fr]">
+          <p className="text-[9px] uppercase tracking-[.26em] text-[#65747d]">{t.overviewLabel}</p>
+          <div>
+            <h2 className="max-w-[1100px] text-[clamp(3rem,7vw,7.3rem)] font-light leading-[.9] tracking-[-.06em]">{t.overviewTitle}</h2>
+            <p className="mt-10 max-w-4xl text-[clamp(1.05rem,1.5vw,1.35rem)] leading-[1.85] text-[#59636a]">{t.overview}</p>
           </div>
         </div>
       </section>
-      <section className="px-6 py-24 sm:px-10 md:py-36 lg:px-16">
-        <div className="mx-auto grid max-w-[1450px] gap-10 lg:grid-cols-[.35fr_1fr]">
-          <p className="text-[10px] uppercase tracking-[.28em] text-[#4f6b7a]">{t.overviewLabel}</p>
-          <div><h2 className="max-w-[1000px] text-[clamp(2.8rem,6vw,6rem)] font-light leading-[.95] tracking-[-.055em]">{t.overviewTitle}</h2><p className="mt-10 max-w-3xl text-lg leading-[1.85] text-[#596067]">{t.overview}</p></div>
+
+      <section className="border-y border-[#c9c7c1] bg-[#ebe8e1] px-5 py-24 sm:px-8 md:py-32 lg:px-16">
+        <div className="mx-auto max-w-[1480px]">
+          <div className="grid gap-8 lg:grid-cols-[.32fr_1fr]">
+            <p className="text-[9px] uppercase tracking-[.26em] text-[#65747d]">{t.scopeLabel}</p>
+            <h2 className="text-[clamp(3rem,6vw,6.6rem)] font-light leading-[.9] tracking-[-.055em]">{t.scopeTitle}</h2>
+          </div>
+          <div className="mt-16 border-t border-[#bdbab2]">
+            {t.stages.map(([number, title, description, status]) => (
+              <div key={number} className="grid gap-4 border-b border-[#bdbab2] py-7 md:grid-cols-[70px_1fr_1.35fr_180px] md:items-center md:py-9">
+                <span className="text-[10px] text-[#65747d]">{number}</span>
+                <h3 className="text-[clamp(1.35rem,2.1vw,2.25rem)] font-light tracking-[-.035em]">{title}</h3>
+                <p className="max-w-xl text-sm leading-7 text-[#59636a]">{description}</p>
+                <p className="text-[10px] uppercase tracking-[.16em] text-[#65747d]">{status}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-9 max-w-3xl border-s-2 border-[#c51b29] ps-5 text-sm leading-7 text-[#59636a]">{t.proof}</p>
         </div>
       </section>
-      <section className="bg-[#e8e7e3] px-6 py-24 sm:px-10 lg:px-16">
-        <div className="mx-auto max-w-[1450px]">
-          <div className="grid gap-7 pb-12 lg:grid-cols-[.35fr_1fr]"><p className="text-[10px] uppercase tracking-[.28em] text-[#4f6b7a]">{t.previewLabel}</p><div><h2 className="text-[clamp(2.7rem,5.5vw,5.8rem)] font-light leading-[.95] tracking-[-.045em]">{t.previewTitle}</h2><p className="mt-7 max-w-3xl text-base leading-8 text-[#596067]">{t.previewBody}</p></div></div>
-          <figure><div className="relative aspect-[16/10] w-full overflow-hidden bg-white"><Image src={identity} fill unoptimized sizes="100vw" alt="NOVA HILLS PRIME brand presentation visual" className="object-contain" /></div><figcaption className="mt-4 text-[10px] uppercase tracking-[.15em] text-[#596067]">{t.visualCaption}</figcaption></figure>
-          <a href="https://novahillseg.com/" target="_blank" rel="noopener noreferrer" className="mt-10 inline-flex border-b border-[#4f6b7a] pb-3 text-xs uppercase tracking-[.18em] hover:text-[#4f6b7a]">{t.viewSite} ↗</a>
+
+      <section className="bg-[#4e6673] px-5 py-24 text-white sm:px-8 md:py-32 lg:px-16">
+        <div className="mx-auto max-w-[1480px]">
+          <p className="text-[9px] uppercase tracking-[.28em] text-white/55">{t.nextLabel}</p>
+          <h2 className="mt-7 text-[clamp(3.8rem,10vw,10rem)] font-light leading-[.82] tracking-[-.06em]">{t.nextTitle}</h2>
+          <div className="mt-14 flex flex-wrap gap-8 text-sm">
+            <Link href="/contact" className="border-b border-white pb-2">{t.nextAction} ↗</Link>
+            <Link href="/projects" className="border-b border-white/35 pb-2">{t.back} ↗</Link>
+          </div>
         </div>
       </section>
-      <section className="px-6 py-24 sm:px-10 md:py-36 lg:px-16">
-        <div className="mx-auto max-w-[1450px]">
-          <p className="text-[10px] uppercase tracking-[.28em] text-[#4f6b7a]">{t.scopeLabel}</p>
-          <h2 className="mt-7 text-[clamp(2.8rem,6vw,6rem)] font-light leading-[.95] tracking-[-.055em]">{t.scopeTitle}</h2>
-          <div className="mt-14 border-t border-[#c7c7c1]">{t.stages.map(([number,title,description,status]) => <div key={number} className="grid gap-4 border-b border-[#c7c7c1] py-8 md:grid-cols-[80px_1fr_1.5fr_220px] md:items-center"><span className="text-[11px] text-[#4f6b7a]">{number}</span><h3 className="text-[clamp(1.4rem,2vw,2rem)] font-light">{title}</h3><p className="max-w-lg text-sm leading-7 text-[#596067]">{description}</p><p className="text-xs text-[#4f6b7a]">{status}</p></div>)}</div>
-          <p className="mt-8 max-w-2xl border-s-2 border-[#4f6b7a] ps-5 text-sm leading-7 text-[#596067]">{t.proof}</p>
-        </div>
-      </section>
-      <section className="bg-[#4f6b7a] px-6 py-24 text-white sm:px-10 md:py-32 lg:px-16"><div className="mx-auto max-w-[1450px]"><p className="text-[10px] uppercase tracking-[.3em] text-white/60">{t.nextLabel}</p><h2 className="mt-7 text-[clamp(3.3rem,9vw,9rem)] font-light leading-[.9] tracking-[-.055em]">{t.nextTitle}</h2><div className="mt-14 flex flex-wrap gap-8 text-sm"><Link href="/contact" className="border-b border-white pb-2">{t.nextAction} ↗</Link><Link href="/projects" className="border-b border-white/40 pb-2">{t.back} ↗</Link></div></div></section>
     </main>
   );
 }
