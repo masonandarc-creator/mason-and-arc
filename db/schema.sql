@@ -718,6 +718,7 @@ CREATE TABLE IF NOT EXISTS qs_consumption_recipes (
   coefficient NUMERIC(20,8) NOT NULL CHECK (coefficient > 0),
   waste_percent NUMERIC(8,6) NOT NULL DEFAULT 0 CHECK (waste_percent BETWEEN 0 AND 1),
   technical_basis TEXT NOT NULL DEFAULT '',
+  approval_reference TEXT NOT NULL DEFAULT '',
   status TEXT NOT NULL DEFAULT 'Draft' CHECK (status IN ('Draft','Approved','Archived')),
   approved_by TEXT REFERENCES users(id),
   approved_at TIMESTAMPTZ,
