@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
+import { ensureQsReady } from "@/lib/server/qsBootstrap";
 import { requireServerUser,audit } from "@/lib/server/auth";
 import { query } from "@/lib/server/db";
 import { handleQsError,requiredText,boundedText,nonnegative } from "@/lib/server/qsValidation";
 export const runtime="nodejs";export const dynamic="force-dynamic";
 export async function GET(request:Request){
- try{await requireServerUser(["Owner","Manager","Engineer"]);
+ try{await requireServerUser(["Owner","Manager","Engineer"]); await ensureQsReady();
  const projectId=boundedText(new URL(request.url).searchParams.get("projectId"),100);
  const {rows}=await query(`SELECT e.*,p.name AS project_name,p.code AS project_code
    FROM qs_estimates e JOIN projects p ON p.id=e.project_id
@@ -13,7 +14,7 @@ export async function GET(request:Request){
  }catch(e){return handleQsError(e);}
 }
 export async function POST(request:Request){
- try{const user=await requireServerUser(["Owner","Manager"]);
+ try{const user=await requireServerUser(["Owner","Manager"]); await ensureQsReady();
  const b=await request.json() as Record<string,unknown>;
  const projectId=requiredText(b.project_id,"Project",100),title=requiredText(b.title,"Estimate title",180),
  governorate=requiredText(b.governorate,"Governorate",80);
