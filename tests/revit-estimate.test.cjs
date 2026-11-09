@@ -50,5 +50,5 @@ test("Excel export starts as a ZIP with real XLSX worksheet entries",async()=>{
  const data=Buffer.from(out).toString("utf8");
  assert.match(data,/xl\/worksheets\/sheet10\.xml/);
  assert.match(data,/<sheet name="BOQ"/);
- assert.match(data,/UNVERIFIED QUANTITY TAKEOFF/);
+ assert.match(data,/MASON &amp; ARC \/ MATERIAL TAKEOFF &amp; BOQ/);
 });
