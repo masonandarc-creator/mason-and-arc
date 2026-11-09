@@ -15,6 +15,8 @@ public sealed class ModelExport
 public sealed class ElementExport
 {
     public string UniqueId { get; init; } = "";
+    public long ElementId { get; init; }
+    public string CategoryCode { get; init; } = "";
     public string Category { get; init; } = "";
     public string Name { get; init; } = "";
     public string Level { get; init; } = "";
@@ -38,7 +40,9 @@ public static class ModelTakeoff
         BuiltInCategory.OST_StructuralColumns, BuiltInCategory.OST_Columns,
         BuiltInCategory.OST_StructuralFraming, BuiltInCategory.OST_StructuralFoundation,
         BuiltInCategory.OST_Doors, BuiltInCategory.OST_Windows,
-        BuiltInCategory.OST_Stairs, BuiltInCategory.OST_Railings,
+        BuiltInCategory.OST_Stairs, BuiltInCategory.OST_StairsRuns, BuiltInCategory.OST_StairsLandings,
+        BuiltInCategory.OST_CurtainWallPanels, BuiltInCategory.OST_CurtainWallMullions,
+        BuiltInCategory.OST_Railings,
         BuiltInCategory.OST_GenericModel
     ];
     private static double? Convert(Parameter? p, UnitTypeIdMarker units)
@@ -107,6 +111,8 @@ public static class ModelTakeoff
                 result.Elements.Add(new ElementExport
                 {
                     UniqueId=e.UniqueId,
+                    ElementId=e.Id.Value,
+                    CategoryCode=cat.ToString(),
                     Category=e.Category.Name,
                     Name=e.Name,
                     Level=level,
@@ -123,6 +129,10 @@ public static class ModelTakeoff
             }
         }
         if (result.Elements.Count == 0) result.Warnings.Add("No supported modeled elements found.");
+        var glazedHosts = result.Elements.Count(x => x.CategoryCode=="OST_Walls" && (x.Name.Contains("Glazing",StringComparison.OrdinalIgnoreCase) || x.Name.Contains("Storefront",StringComparison.OrdinalIgnoreCase)) && x.Materials.Count==0);
+        if (glazedHosts > 0) result.Warnings.Add($"{glazedHosts} glazed host walls have no direct material quantities. Check curtain panel and mullion children for procurement; do not sum host envelope area with panel glass.");
+        var stairContainers = result.Elements.Count(x => x.CategoryCode=="OST_Stairs" && x.VolumeM3 is null && x.AreaM2 is null);
+        if (stairContainers > 0) result.Warnings.Add($"{stairContainers} stair containers have no direct gross geometry. Review exported stairs runs/landings and their material assignments.");
         return result;
     }
 }

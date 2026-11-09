@@ -9,7 +9,7 @@ export async function GET(request:Request){
  try{
   await requireServerUser(["Owner","Manager","Engineer"]);await ensureQsReady();await ensureRevitTables();
   const projectId=requiredText(new URL(request.url).searchParams.get("projectId"),"Project",100);
-  const {rows}=await query(`SELECT id,project_id,model_title,element_count,summary,exported_at,created_at
+  const {rows}=await query(`SELECT id,project_id,model_title,element_count,source_type,summary,exported_at,created_at
     FROM qs_revit_snapshots WHERE project_id=$1 ORDER BY created_at DESC LIMIT 30`,[projectId]);
   return NextResponse.json({data:rows},{headers:{"Cache-Control":"no-store"}});
  }catch(e){return handleQsError(e);}
