@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
+import { ensureQsReady } from "@/lib/server/qsBootstrap";
 import { requireServerUser,audit } from "@/lib/server/auth";
 import { query } from "@/lib/server/db";
 import { handleQsError,requiredText,boundedText,positive,nonnegative } from "@/lib/server/qsValidation";
 export const runtime="nodejs";export const dynamic="force-dynamic";
 export async function GET(request:Request){
  try{
-  await requireServerUser(["Owner","Manager","Engineer"]);
+  await requireServerUser(["Owner","Manager","Engineer"]); await ensureQsReady();
   const governorate=boundedText(new URL(request.url).searchParams.get("governorate"),80);
   const {rows}=await query(`SELECT m.id,m.code,m.name_ar,m.name_en,m.category,m.unit,m.pack_size,m.default_waste,m.specification,m.status,
     q.id AS quote_id,q.supplier_name,q.unit_price_egp,q.delivery_egp_per_unit,q.quoted_at,q.valid_until,q.source_reference
@@ -20,7 +21,7 @@ export async function GET(request:Request){
 }
 export async function POST(request:Request){
  try{
-  const user=await requireServerUser(["Owner","Manager"]);
+  const user=await requireServerUser(["Owner","Manager"]); await ensureQsReady();
   const body=await request.json() as Record<string,unknown>;
   const code=requiredText(body.code,"Code",48).toUpperCase().replace(/[^A-Z0-9_]/g,"");
   if(!code)throw new Error("VALIDATION:Invalid code");
