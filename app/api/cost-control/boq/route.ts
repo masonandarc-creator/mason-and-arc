@@ -35,9 +35,9 @@ export async function GET(request:Request){
    const cost=priceBoqLine({quantity:qty,materials,labor:labor?{quoteId:labor.id,rateEgp:labor.unit_rate_egp}:null,
     equipment:equipment?{quoteId:equipment.id,rateEgp:equipment.unit_rate_egp}:null,markups});
    if(!recipeRows.length&&!nonMaterialActivities.has(t.code)){
-     return {...t,quantity:qty,...cost,status:"UNPRICED",missing:[...cost.missing,"recipe:missing"],totalEgp:null,unitRateEgp:null};
+     return {...t,...cost,status:"UNPRICED" as const,missing:[...cost.missing,"recipe:missing"],totalEgp:null,unitRateEgp:null};
    }
-   return {...t,quantity:qty,...cost};
+   return {...t,...cost};
   });
   return NextResponse.json({estimate:{id:e.id,code:e.code,title:e.title,governorate:e.governorate,status:e.status},
     summary:aggregateEstimate(lines),lines},{headers:{"Cache-Control":"no-store"}});
