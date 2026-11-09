@@ -52,6 +52,10 @@ const navigation = [
     href: "/app/admin/construction",
   },
   {
+    label: "Quantity & Cost Control",
+    href: "/app/admin/quantity-cost",
+  },
+  {
     label: "Operations OS",
     href: "/app/admin/operations",
   },
