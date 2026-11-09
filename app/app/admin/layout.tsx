@@ -43,6 +43,7 @@ const navigationGroups: { label: string; items: WorkspaceNavItem[] }[] = [
     label: "Project Delivery",
     items: [
       { label: "Construction OS", href: "/app/admin/construction" },
+      { label: "Quantity & Cost Control", href: "/app/admin/quantity-cost" },
       { label: "Site Intelligence", href: "/app/admin/site" },
       { label: "Approvals", href: "/app/admin/approvals" },
       { label: "Files", href: "/app/admin/files" },
