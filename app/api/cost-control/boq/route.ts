@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { ensureQsReady } from "@/lib/server/qsBootstrap";
 import { requireServerUser } from "@/lib/server/auth";
 import { query } from "@/lib/server/db";
 import { handleQsError,requiredText } from "@/lib/server/qsValidation";
@@ -6,7 +7,7 @@ import { measureQuantity,priceBoqLine,aggregateEstimate } from "@/lib/quantity/c
 export const runtime="nodejs";export const dynamic="force-dynamic";
 export async function GET(request:Request){
  try{
-  await requireServerUser(["Owner","Manager","Engineer"]);
+  await requireServerUser(["Owner","Manager","Engineer"]); await ensureQsReady();
   const estimateId=requiredText(new URL(request.url).searchParams.get("estimateId"),"Estimate",80);
   const {rows:estimates}=await query("SELECT * FROM qs_estimates WHERE id=$1",[estimateId]);
   const e=estimates[0];if(!e)return NextResponse.json({error:"Estimate not found"},{status:404});
