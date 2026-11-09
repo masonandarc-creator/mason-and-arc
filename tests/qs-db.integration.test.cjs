@@ -28,7 +28,7 @@ test("QS migration + draft workbook seed on an isolated PostgreSQL schema",async
   const pair=await client.query("SELECT r.coefficient,m.default_waste,r.waste_percent FROM qs_consumption_recipes r JOIN qs_materials m ON m.id=r.material_id LIMIT 1");
   assert.equal(Number(pair.rows[0].waste_percent),Number(pair.rows[0].default_waste));
   await client.query("SAVEPOINT check_invalid_approval");
-  const invalidApproval=await client.query("INSERT INTO qs_supplier_quotes(material_id,supplier_name,governorate,unit_price_egp,quoted_at,source_reference,status) SELECT id,'test','Giza',10,CURRENT_DATE,'fake','Approved' FROM qs_materials LIMIT 1").then(()=>null,e=>e);
+  const invalidApproval=await client.query("INSERT INTO qs_supplier_quotes(material_id,supplier_name,governorate,unit_price_egp,quoted_at,valid_until,source_reference,status) SELECT id,'test','Giza',10,CURRENT_DATE,CURRENT_DATE,'fake','Approved' FROM qs_materials LIMIT 1").then(()=>null,e=>e);
   assert.equal(invalidApproval?.code,"23514");
   await client.query("ROLLBACK TO SAVEPOINT check_invalid_approval");
   await client.query("ROLLBACK");
