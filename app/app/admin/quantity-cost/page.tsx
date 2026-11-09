@@ -60,6 +60,17 @@ export default function QuantityCostPage(){
   finally{setLoading(false)}
  },[governorate]);
  useEffect(()=>{void load()},[load]);
+ function exportBoqCsv(){
+  if(!boq)return;
+  const columns=["Code","Activity Arabic","Zone","Unit","Quantity","Unit Rate EGP","Amount EGP","Status","Missing inputs"];
+  const records=boq.lines.map(l=>[l.code,l.title_ar,l.zone,l.unit,l.quantity,l.unitRateEgp??"",l.totalEgp??"",l.status,l.missing.join("; ")]);
+  records.push(["TOTAL","","","", "", "",boq.summary.totalEgp??"",boq.summary.status,""]);
+  const csv="\uFEFF"+[columns,...records].map(r=>r.map(v=>'"'+String(v??"").replaceAll('"','""')+'"').join(",")).join("\r\n");
+  const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+  const href=URL.createObjectURL(blob);
+  const anchor=document.createElement("a");anchor.href=href;anchor.download=boq.estimate.code+"-BOQ.csv";
+  document.body.appendChild(anchor);anchor.click();anchor.remove();URL.revokeObjectURL(href);
+ }
  const getBoq=useCallback(async(id:string)=>{if(!id){setBoq(null);return;}try{const data=await api<Boq>(`boq?estimateId=${encodeURIComponent(id)}`);setBoq(data)}catch(e){setError(e instanceof Error?e.message:"Could not load BOQ")}},[]);
  useEffect(()=>{void getBoq(selectedEstimate)},[selectedEstimate,getBoq]);
  async function save<T>(work:()=>Promise<T>,success:string){setBusy(true);setError("");setMessage("");try{await work();setMessage(success);await load();if(selectedEstimate)await getBoq(selectedEstimate)}catch(e){setError(e instanceof Error?e.message:"Save failed")}finally{setBusy(false)}}
@@ -143,9 +154,9 @@ export default function QuantityCostPage(){
      <div className="mt-3 grid gap-3 md:grid-cols-4">{(["overhead_percent","contingency_percent","profit_percent","tax_percent"] as const).map(k=>field(k.replace("_percent"," %").replace("_"," "),<input key={k} type="number" min="0" max="100" step="any" className={input} value={estimateForm[k]} onChange={e=>setEstimateForm({...estimateForm,[k]:e.target.value})}/>))}</div>
     </form>
     <section className={card}><div className="flex flex-wrap items-end justify-between gap-3"><SectionTitle title="Measured BOQ" caption="Rates are computed only from reviewed recipes and in-date local quotes."/>
-     {field("Estimate",<select className={input} value={selectedEstimate} onChange={e=>setSelectedEstimate(e.target.value)}><option value="">Choose estimate</option>{estimates.map(e=><option key={e.id} value={e.id}>{e.code} · {e.project_name} · {e.title}</option>)}</select>)}</div>
+     {field("Estimate",<select className={input} value={selectedEstimate} onChange={e=>setSelectedEstimate(e.target.value)}><option value="">Choose estimate</option>{estimates.map(e=><option key={e.id} value={e.id}>{e.code} · {e.project_name} · {e.title}</option>)}</select>)}{boq&&<button type="button" onClick={exportBoqCsv} className="rounded-md border border-[#cad4d5] bg-white px-4 py-2.5 text-xs text-[#4F6B7A]">Export BOQ CSV</button>}</div>
      {boq&&<><div className="mt-5 grid gap-3 sm:grid-cols-3"><Mini label="Priced lines" value={boq.summary.pricedLines}/><Mini label="Unpriced lines" value={boq.summary.unpricedLines}/><Mini label="Total estimate / EGP" value={boq.summary.totalEgp==null?"NOT READY":fmt(boq.summary.totalEgp)}/></div>
-     <div className="mt-4 overflow-auto"><table className="w-full min-w-[760px] text-left text-xs"><thead className="bg-[#f1f4f3]"><tr><Th>Activity</Th><Th>Zone</Th><Th align="right">Qty</Th><Th>Unit</Th><Th align="right">Rate (EGP)</Th><Th align="right">Amount (EGP)</Th><Th>Pricing status</Th></tr></thead><tbody>{boq.lines.map(x=><tr key={x.id} className="border-b border-[#e7eaeb]"><Td>{x.code}<p dir="rtl" className="max-w-[240px] text-right text-[#76828a]">{x.title_ar}</p></Td><Td>{x.zone||"—"}</Td><Td align="right">{fmt(x.quantity)}</Td><Td>{x.unit}</Td><Td align="right">{fmt(x.unitRateEgp)}</Td><Td align="right">{fmt(x.totalEgp)}</Td><Td><span className={`rounded px-2 py-1 ${pill(x.status==="PRICED")}`}>{x.status}</span>{x.missing.length>0&&<p className="mt-1 max-w-[260px] text-[10px] text-[#a27642]">{x.missing.join(" · ")}</p>}</Td></tr>)}</tbody></table>{!boq.lines.length&&<p className="p-10 text-center text-sm text-[#7b858b]">No takeoff lines yet.</p>}</div></>}
+     <div className="mt-4 overflow-auto"><table className="w-full min-w-[760px] text-left text-xs"><thead className="bg-[#f1f4f3]"><tr><Th>Activity</Th><Th>Zone</Th><Th align="right">Qty</Th><Th>Unit</Th><Th align="right">Rate (EGP)</Th><Th align="right">Amount (EGP)</Th><Th>Pricing status</Th><Th>Actions</Th></tr></thead><tbody>{boq.lines.map(x=><tr key={x.id} className="border-b border-[#e7eaeb]"><Td>{x.code}<p dir="rtl" className="max-w-[240px] text-right text-[#76828a]">{x.title_ar}</p></Td><Td>{x.zone||"—"}</Td><Td align="right">{fmt(x.quantity)}</Td><Td>{x.unit}</Td><Td align="right">{fmt(x.unitRateEgp)}</Td><Td align="right">{fmt(x.totalEgp)}</Td><Td><span className={`rounded px-2 py-1 ${pill(x.status==="PRICED")}`}>{x.status}</span>{x.missing.length>0&&<p className="mt-1 max-w-[260px] text-[10px] text-[#a27642]">{x.missing.join(" · ")}</p>}</Td><Td>{boq.estimate.status==="Draft"&&<button type="button" disabled={busy} onClick={()=>{if(window.confirm("Remove this takeoff line?"))void save(()=>api("takeoff?id="+encodeURIComponent(x.id),"DELETE"),"Takeoff line deleted.")}} className="rounded border border-[#edd9d5] px-2 py-1 text-[#a34a3c]">Remove</button>}</Td></tr>)}</tbody></table>{!boq.lines.length&&<p className="p-10 text-center text-sm text-[#7b858b]">No takeoff lines yet.</p>}</div></>}
     </section>
     <form className={card} onSubmit={e=>{e.preventDefault();void save(()=>api("takeoff","POST",{...takeoffForm,estimate_id:selectedEstimate}),"Measured element added to estimate.")}}>
     <SectionTitle title="Add measured element" caption={selectedActivity?`Measurement rule: ${selectedActivity.measure_rule} · Unit: ${selectedActivity.unit}`:"Select an activity"}/>
