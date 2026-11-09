@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
+import { ensureQsReady } from "@/lib/server/qsBootstrap";
 import { requireServerUser,audit } from "@/lib/server/auth";
 import { query } from "@/lib/server/db";
 import { handleQsError,requiredText,boundedText } from "@/lib/server/qsValidation";
 export const runtime="nodejs";export const dynamic="force-dynamic";
 export async function GET(request:Request){
- try{await requireServerUser(["Owner","Manager","Engineer"]);
+ try{await requireServerUser(["Owner","Manager","Engineer"]); await ensureQsReady();
  const code=boundedText(new URL(request.url).searchParams.get("activityCode"),48);
  const {rows}=await query(`SELECT r.*,a.code AS activity_code,a.title_ar AS activity_name,m.code AS material_code,m.name_ar AS material_name,m.unit
  FROM qs_consumption_recipes r JOIN qs_activities a ON a.id=r.activity_id JOIN qs_materials m ON m.id=r.material_id
@@ -14,7 +15,7 @@ export async function GET(request:Request){
 }
 export async function PATCH(request:Request){
  try{
- const user=await requireServerUser(["Owner"]);const b=await request.json() as Record<string,unknown>;
+ const user=await requireServerUser(["Owner"]); await ensureQsReady();const b=await request.json() as Record<string,unknown>;
  const id=requiredText(b.id,"Recipe ID",80),decision=requiredText(b.status,"Decision",20);
  const reference=decision==="Approved"?requiredText(b.approval_reference,"Approved specification / drawing reference",500):"";
  if(!["Approved","Draft","Archived"].includes(decision))throw new Error("VALIDATION:Invalid recipe status");
