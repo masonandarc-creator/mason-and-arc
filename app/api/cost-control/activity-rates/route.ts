@@ -14,7 +14,7 @@ export async function POST(request:Request){
  try{const user=await requireServerUser(["Owner","Manager"]); await ensureQsReady();const b=await request.json() as Record<string,unknown>;
  const act=requiredText(b.activity_id,"Activity",80),component=requiredText(b.component,"Component",20);
  if(!["Labor","Equipment"].includes(component))throw new Error("VALIDATION:Invalid component");
- const quotedAt=validDate(b.quoted_at,"Quotation date"),until=b.valid_until?validDate(b.valid_until,"Valid until"):null;
+ const quotedAt=validDate(b.quoted_at,"Quotation date"),until=validDate(b.valid_until,"Valid until");
  if(until&&until<quotedAt)throw new Error("VALIDATION:Validity date precedes quotation");
  const {rows}=await query(`INSERT INTO qs_activity_rate_quotes(activity_id,component,contractor_name,governorate,unit_rate_egp,quoted_at,valid_until,source_reference)
  VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`,[act,component,requiredText(b.contractor_name,"Contractor",160),
