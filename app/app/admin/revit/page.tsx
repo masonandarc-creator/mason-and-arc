@@ -1,0 +1,94 @@
+"use client";
+import { useCallback,useEffect,useState } from "react";
+import { listResource } from "@/lib/client/dataApi";
+import { Database,Download,HardHat,RefreshCw,ShieldCheck,Usb,AlertTriangle } from "lucide-react";
+type Project={id:string;code:string;name:string};
+type Token={id:string;project_id:string;project_name:string;label:string;expires_at:string;revoked_at:string|null;last_used_at:string|null};
+type CategoryTotal={category:string;count:number;volumeM3:number;areaM2:number;lengthM:number;missingVolume:number;missingArea:number};
+type MaterialTotal={name:string;count:number;volumeM3:number;areaM2:number};
+type Snapshot={id:string;model_title:string;element_count:number;exported_at:string;created_at:string;summary:{categoryTotals:CategoryTotal[];materialTotals:MaterialTotal[];warningCount:number;notice:string}};
+const input="w-full rounded-md border border-[#d5dcdd] bg-white px-3 py-2.5 text-sm";
+async function api<T>(path:string,method="GET",body?:unknown):Promise<T>{
+ const response=await fetch("/api/cost-control/revit/"+path,{method,headers:{"Content-Type":"application/json"},credentials:"include",cache:"no-store",body:body?JSON.stringify(body):undefined});
+ const json=await response.json();if(!response.ok)throw Error(json.error||"Request failed");return json as T;
+}
+const number=(n:number)=>new Intl.NumberFormat("en-EG",{maximumFractionDigits:3}).format(n);
+export default function RevitConnectorPage(){
+ const [projects,setProjects]=useState<Project[]>([]),[projectId,setProjectId]=useState(""),[label,setLabel]=useState("Alienware — Revit 2027");
+ const [tokens,setTokens]=useState<Token[]>([]),[snapshots,setSnapshots]=useState<Snapshot[]>([]),[selected,setSelected]=useState<string|null>(null),[secret,setSecret]=useState<string|null>(null),[error,setError]=useState(""),[busy,setBusy]=useState(false),[loading,setLoading]=useState(true);
+ const load=useCallback(async()=>{
+  setError("");setLoading(true);
+  try{
+   const [p,t]=await Promise.all([listResource<Project>("projects",undefined,200),api<{data:Token[]}>("tokens")]);
+   setProjects(p.data);setTokens(t.data);setProjectId(old=>old||p.data[0]?.id||"");
+  }catch(e){setError(e instanceof Error?e.message:"Unable to load Revit workspace")}
+  finally{setLoading(false)}
+ },[]);
+ const loadSnapshots=useCallback(async()=>{
+  if(!projectId){setSnapshots([]);return;}
+  try{const data=await api<{data:Snapshot[]}>("snapshots?projectId="+encodeURIComponent(projectId));setSnapshots(data.data);setSelected(old=>data.data.some(s=>s.id===old)?old:data.data[0]?.id||null);}
+  catch(e){setError(e instanceof Error?e.message:"Snapshot load failed")}
+ },[projectId]);
+ useEffect(()=>{void load()},[load]);
+ useEffect(()=>{void loadSnapshots()},[loadSnapshots]);
+ async function createToken(){
+  if(!projectId)return;
+  setBusy(true);setError("");setSecret(null);
+  try{const response=await api<{data:{token:string}}>("tokens","POST",{project_id:projectId,label});
+   setSecret(response.data.token);await load();
+  }catch(e){setError(e instanceof Error?e.message:"Token creation failed")}
+  finally{setBusy(false)}
+ }
+ async function revoke(id:string){
+  if(!window.confirm("Revoke this Revit Connector token? The desktop Sync command will stop working."))return;
+  setBusy(true);setError("");
+  try{await api("tokens?id="+encodeURIComponent(id),"DELETE");await load();}
+  catch(e){setError(e instanceof Error?e.message:"Could not revoke token")}
+  finally{setBusy(false)}
+ }
+ const snap=snapshots.find(s=>s.id===selected);
+ return <main className="min-h-screen bg-[#f7f8f6] px-4 py-8 text-[#1c2b31] sm:px-8 lg:px-10">
+  <div className="mx-auto max-w-[1400px]">
+   <p className="text-[10px] uppercase tracking-[.25em] text-[#4F6B7A]">Mason & Arc / Enterprise Studio OS</p>
+   <div className="mt-2 flex flex-wrap items-end justify-between gap-5 border-b border-[#d8dfe0] pb-7">
+    <div><h1 className="text-3xl font-medium tracking-tight sm:text-4xl">Revit Connector <span className="text-[#4F6B7A]">2027</span></h1>
+     <p className="mt-2 max-w-2xl text-sm text-[#65747b]">Secure read-only BIM quantity capture, project pairing, material inventory and change history. Draft quantities only; engineering verification required.</p></div>
+    <a href="https://github.com/masonandarc-creator/mason-and-arc/actions/workflows/revit-2027.yml" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-md bg-[#4F6B7A] px-4 py-3 text-xs text-white"><Download size={15}/> Revit 2027 installer (GitHub Actions)</a>
+   </div>
+   {error&&<p role="alert" className="mt-5 rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-700">{error}</p>}
+   <section className="mt-7 grid gap-4 md:grid-cols-3">
+    <div className="rounded-xl border border-[#dfe4e5] bg-white p-5"><Usb size={20} className="text-[#4F6B7A]"/><h2 className="mt-3 text-lg font-medium">01 / Install</h2><p className="mt-2 text-xs leading-6 text-[#65747b]">Download the Windows artifact. Run Install-MasonArc-Revit2027.ps1, then restart Revit. A MASON & ARC ribbon tab will appear.</p></div>
+    <div className="rounded-xl border border-[#dfe4e5] bg-white p-5"><ShieldCheck size={20} className="text-[#4F6B7A]"/><h2 className="mt-3 text-lg font-medium">02 / Connect</h2><p className="mt-2 text-xs leading-6 text-[#65747b]">Create a project-scoped 90-day token below. Open Revit &gt; MASON & ARC &gt; Connect OS. Paste the token and consent to sharing model quantities.</p></div>
+    <div className="rounded-xl border border-[#dfe4e5] bg-white p-5"><RefreshCw size={20} className="text-[#4F6B7A]"/><h2 className="mt-3 text-lg font-medium">03 / Sync</h2><p className="mt-2 text-xs leading-6 text-[#65747b]">Open a villa project, press Sync Model and confirm. Model category and material quantities appear here. No changes are made to Revit or approved BOQs.</p></div>
+   </section>
+   <section className="mt-5 grid gap-4 lg:grid-cols-2">
+    <div className="rounded-xl border border-[#dfe4e5] bg-white p-5">
+     <div className="flex items-center gap-2"><Database size={18} className="text-[#4F6B7A]"/><h2 className="text-lg font-medium">Project connection</h2></div>
+     <label className="mt-5 block text-xs text-[#53616a]">Mason & Arc Project
+      <select className={"mt-2 "+input} value={projectId} onChange={e=>{setProjectId(e.target.value);setSecret(null)}}><option value="">Choose project</option>{projects.map(p=><option key={p.id} value={p.id}>{p.code} · {p.name}</option>)}</select>
+     </label>
+     <label className="mt-4 block text-xs text-[#53616a]">Computer / connector label
+      <input className={"mt-2 "+input} value={label} maxLength={80} onChange={e=>setLabel(e.target.value)}/>
+     </label>
+     <button disabled={busy||!projectId||!label.trim()} onClick={()=>void createToken()} className="mt-4 rounded-md bg-[#4F6B7A] px-4 py-3 text-xs text-white disabled:opacity-40">Create project-bound token (Owner / Manager)</button>
+     {secret&&<div className="mt-4 rounded-md border border-[#dbd6c5] bg-[#faf8ef] p-4"><p className="text-xs font-medium">Copy this token now — it is shown only once.</p><code className="mt-2 block break-all text-xs">{secret}</code><button type="button" className="mt-3 rounded-md border bg-white px-3 py-2 text-xs" onClick={()=>void navigator.clipboard.writeText(secret)}>Copy token</button></div>}
+     {loading?<p className="mt-4 text-xs">Loading...</p>:<div className="mt-5 space-y-2">{tokens.filter(t=>t.project_id===projectId).map(t=><div key={t.id} className="flex items-center justify-between gap-3 border-t border-[#e2e6e6] py-3 text-xs"><div><p>{t.label} · {t.revoked_at?"Revoked":new Date(t.expires_at).toLocaleDateString()}</p><p className="mt-1 text-[#88959a]">Last sync: {t.last_used_at?new Date(t.last_used_at).toLocaleString():"Never"}</p></div>{!t.revoked_at&&<button disabled={busy} onClick={()=>void revoke(t.id)} className="rounded border border-[#e0c5bf] px-2 py-1.5 text-[#9c5146]">Revoke</button>}</div>)}</div>}
+    </div>
+    <div className="rounded-xl border border-[#dfe4e5] bg-white p-5">
+     <div className="flex items-center justify-between gap-3"><h2 className="text-lg font-medium">Synced model snapshots</h2><button type="button" onClick={()=>void loadSnapshots()} className="rounded border border-[#d4dede] p-2" aria-label="Reload snapshots"><RefreshCw size={16}/></button></div>
+     <p className="mt-2 text-xs text-[#7b898d]">Each Sync creates a snapshot so a later revision can be compared.</p>
+     <div className="mt-4 space-y-2">{snapshots.map(s=><button key={s.id} onClick={()=>setSelected(s.id)} className={`w-full rounded-md border p-3 text-left text-xs ${selected===s.id?"border-[#4F6B7A] bg-[#eef3f3]":"border-[#e0e4e4]"}`}>
+      <span className="font-medium">{s.model_title}</span><span className="mt-1 block text-[#66747b]">{s.element_count} modeled elements · {new Date(s.created_at).toLocaleString()}</span>
+     </button>)}{!snapshots.length&&<p className="rounded-md bg-[#f4f6f5] p-8 text-center text-xs text-[#8b969a]">No model sync yet for this project.</p>}</div>
+    </div>
+   </section>
+   {snap&&<section className="mt-5 rounded-xl border border-[#dfe4e5] bg-white p-5">
+    <div className="flex flex-wrap items-center justify-between gap-3"><div><h2 className="text-xl font-medium">{snap.model_title} · Measured inventory</h2><p className="mt-1 text-xs text-[#71818a]">Captured {new Date(snap.exported_at).toLocaleString()} · {snap.summary.warningCount} model warnings</p></div><span className="rounded-md bg-[#f3ede2] px-3 py-2 text-xs text-[#8b6b3e]">UNVERIFIED BIM TAKEOFF</span></div>
+    <div className="mt-5 overflow-auto"><table className="w-full min-w-[630px] text-left text-xs"><thead className="bg-[#f1f4f3]"><tr><th className="p-3">Revit category</th><th className="p-3 text-right">Elements</th><th className="p-3 text-right">Volume m³</th><th className="p-3 text-right">Area m²</th><th className="p-3 text-right">Length m</th><th className="p-3 text-right">Missing volume</th></tr></thead><tbody>{snap.summary.categoryTotals.map(c=><tr key={c.category} className="border-b border-[#edf0ef]"><td className="p-3">{c.category}</td><td className="p-3 text-right">{c.count}</td><td className="p-3 text-right">{number(c.volumeM3)}</td><td className="p-3 text-right">{number(c.areaM2)}</td><td className="p-3 text-right">{number(c.lengthM)}</td><td className="p-3 text-right">{c.missingVolume}</td></tr>)}</tbody></table></div>
+    <h3 className="mt-7 font-medium">Modeled material quantities</h3><div className="mt-3 overflow-auto"><table className="w-full min-w-[470px] text-left text-xs"><thead className="bg-[#f1f4f3]"><tr><th className="p-3">Revit material</th><th className="p-3 text-right">Volume m³</th><th className="p-3 text-right">Area m²</th></tr></thead><tbody>{snap.summary.materialTotals.map(m=><tr key={m.name} className="border-b border-[#edf0ef]"><td className="p-3">{m.name}</td><td className="p-3 text-right">{number(m.volumeM3)}</td><td className="p-3 text-right">{number(m.areaM2)}</td></tr>)}</tbody></table></div>
+    <p className="mt-6 flex items-start gap-2 rounded-md bg-[#f8f5eb] p-4 text-xs leading-6 text-[#8a6940]"><AlertTriangle size={16} className="mt-1 shrink-0"/>{snap.summary.notice}</p>
+   </section>}
+   <footer className="mt-8 border-t border-[#d8dfe0] pt-5 text-[10px] uppercase tracking-widest text-[#829098]">MASON & ARC · Revit 2027 · Read only extraction · Source-controlled quantity review</footer>
+  </div>
+ </main>
+}
