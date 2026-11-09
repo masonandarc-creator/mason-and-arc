@@ -5,6 +5,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Windows.Forms;
 using TaskDialog = Autodesk.Revit.UI.TaskDialog;
+using Form = System.Windows.Forms.Form;
+using TextBox = System.Windows.Forms.TextBox;
 namespace MasonArc.Revit2027;
 
 public static class JsonTools
