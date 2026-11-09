@@ -37,3 +37,16 @@ Close Revit and run `powershell -NoProfile -ExecutionPolicy Bypass -File .\Unins
 - Generated user-level manifest: `%APPDATA%\Autodesk\Revit\Addins\2027\MasonArc2027.addin`
 - Back end: `/api/cost-control/revit/tokens`, `/sync`, `/snapshots`
 - Rate data and QS estimates remain separate by design. Automated element-to-BOQ mapping requires a separate approval workflow.
+
+## Material Takeoff, Excel BOQ and PDF report (studio OS)
+
+Once a snapshot is imported or synced to <https://www.masonandarc.com/app/admin/revit>, select it and click **Open Material BOQ**.
+- Map **each Revit wall type** as `Masonry blocks`, `Drywall board`, `Glazed host`, `Exclude` or `Needs review`. All start as `Needs review`, regardless of the material tag in Revit. Choose 0, 1 or 2 plastered/painted wall faces.
+- Enter the nominal block face size and joint spacing, wastage, paint coverage (if known), mortar/cement/sand consumption coefficients (if engineered), and project-specific unit rates. Zero input for coefficients means **unknown, not zero consumption**.
+- **Download Excel sheets** creates a genuine Excel .xlsx containing Executive Summary, BOQ (editable unit prices and Excel formulas), Walls by Type, Walls by Level, Floor Elements, Glazing Inventory, Revit Materials, Model QA, Raw Elements, and Scenario Inputs.
+- **Print / Save PDF** opens the browser print dialog with a Mason & Arc A4 landscape, print-styled presentation. Choose *Save as PDF* in Chrome/Edge.
+- **Save recipe JSON** exports editable decisions for the selected snapshot; **Load recipe JSON** restores them on the same project/snapshot. Recipe changes are kept in browser state until exported, **not saved in the database**.
+- This is a **scenario estimate only**. The original Revit RVT is untouched. No automatic quote, cost baseline, procurement, or approved BOQ is created. If any relevant wall type lacks an explicit system mapping, quantities remain unassigned and costs are incomplete.
+- Curtain host area is shown as envelope reference, **not installed glass quantity**. Revit 2027 v0.2 should capture curtain panels/mullions separately after re-export; panels must be validated before glass procurement.
+- Structural steel, rebar, ceiling finishes, mortar recipe, paint liters and unit rates remain out of scope unless data and engineer-approved rules are supplied. No synthetic material quantities or prices are silently inserted.
+
