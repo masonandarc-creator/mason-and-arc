@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
+import { ensureQsReady } from "@/lib/server/qsBootstrap";
 import { requireServerUser,audit } from "@/lib/server/auth";
 import { query } from "@/lib/server/db";
 import { handleQsError,requiredText,boundedText,nonnegative } from "@/lib/server/qsValidation";
 import { measureQuantity } from "@/lib/quantity/costEngine.mjs";
 export const runtime="nodejs";export const dynamic="force-dynamic";
 export async function GET(request:Request){
- try{await requireServerUser(["Owner","Manager","Engineer"]);
+ try{await requireServerUser(["Owner","Manager","Engineer"]); await ensureQsReady();
  const estimateId=requiredText(new URL(request.url).searchParams.get("estimateId"),"Estimate",80);
  const {rows}=await query(`SELECT t.*,a.code AS activity_code,a.title_ar,a.title_en,a.unit,a.measure_rule
    FROM qs_takeoff_lines t JOIN qs_activities a ON a.id=t.activity_id
@@ -14,7 +15,7 @@ export async function GET(request:Request){
  }catch(e){return handleQsError(e);}
 }
 export async function POST(request:Request){
- try{const user=await requireServerUser(["Owner","Manager","Engineer"]);
+ try{const user=await requireServerUser(["Owner","Manager","Engineer"]); await ensureQsReady();
  const b=await request.json() as Record<string,unknown>;
  const estimateId=requiredText(b.estimate_id,"Estimate",80);
  const activityId=requiredText(b.activity_id,"Activity",80);
