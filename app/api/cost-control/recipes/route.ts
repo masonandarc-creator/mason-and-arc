@@ -16,11 +16,12 @@ export async function PATCH(request:Request){
  try{
  const user=await requireServerUser(["Owner"]);const b=await request.json() as Record<string,unknown>;
  const id=requiredText(b.id,"Recipe ID",80),decision=requiredText(b.status,"Decision",20);
+ const reference=decision==="Approved"?requiredText(b.approval_reference,"Approved specification / drawing reference",500):"";
  if(!["Approved","Draft","Archived"].includes(decision))throw new Error("VALIDATION:Invalid recipe status");
  const {rows}=await query(`UPDATE qs_consumption_recipes SET status=$2,approved_by=CASE WHEN $2='Approved' THEN $3 ELSE NULL END,
- approved_at=CASE WHEN $2='Approved' THEN NOW() ELSE NULL END,updated_at=NOW() WHERE id=$1 RETURNING *`,[id,decision,user.id]);
+ approved_at=CASE WHEN $2='Approved' THEN NOW() ELSE NULL END,approval_reference=$4,updated_at=NOW() WHERE id=$1 RETURNING *`,[id,decision,user.id,reference]);
  if(!rows.length)return NextResponse.json({error:"Recipe not found"},{status:404});
- await audit("qs.recipe.reviewed","QsConsumptionRecipe",id,{actor:user.id,status:decision});
+ await audit("qs.recipe.reviewed","QsConsumptionRecipe",id,{actor:user.id,status:decision,approval_reference:reference});
  return NextResponse.json({data:rows[0]});
  }catch(e){return handleQsError(e);}
 }
