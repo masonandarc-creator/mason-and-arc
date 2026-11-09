@@ -950,8 +950,8 @@ VALUES
 ('DEMOLISH','Groundworks','إزالة / تكسير','m³','VOLUME'),
 ('CLEAN','External Works','نظافة نهائية للموقع','m²','AREA')
 ON CONFLICT(code) DO NOTHING;
-INSERT INTO qs_consumption_recipes(activity_id,material_id,coefficient,technical_basis,status)
-SELECT a.id,m.id,v.coefficient,
+INSERT INTO qs_consumption_recipes(activity_id,material_id,coefficient,waste_percent,technical_basis,status)
+SELECT a.id,m.id,v.coefficient,m.default_waste,
   CASE WHEN v.activity_code IN ('PCC_SITE','RCC_SITE') THEN 'Illustrative only: approved mix design required'
        WHEN v.activity_code='E_POINT' THEN 'Avoid double counting with cable length activities'
        ELSE 'Unverified workbook reference; technical sign-off required' END,
