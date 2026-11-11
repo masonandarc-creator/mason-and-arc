@@ -1,0 +1,41 @@
+name: Import original permit PDF (one-time)
+on:
+  push:
+    branches:
+      - fix/building-permit-pdf-20261111
+    paths:
+      - .github/workflows/import-original-building-permit.yml
+
+permissions:
+  contents: write
+
+jobs:
+  import-permit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout public site
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9 # v4.2.2
+        with:
+          persist-credentials: true
+          fetch-depth: 1
+      - name: Download original PDF and verify exact bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p public/docs
+          curl -fL --retry 3 --connect-timeout 15 --max-time 60 \
+            'https://d2ol7oe51mr4n9.cloudfront.net/user_3HDVjjdApfFlxvKkHr2XjkIPjln/fef621af-20f1-4a23-b32a-658b59ea045a.pdf' \
+            -o public/docs/building-permit-reference.pdf
+          echo 'f5fc46e479eb6f760ecce1afd7348dd780292ab98c230958525b4cefc3e4bff8  public/docs/building-permit-reference.pdf' | sha256sum -c -
+          test "$(wc -c < public/docs/building-permit-reference.pdf)" -eq 199969
+      - name: Commit verified original PDF to this branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/docs/building-permit-reference.pdf
+          if ! git diff --cached --quiet; then
+            git commit -m 'asset: publish original approved building permit PDF without alteration'
+            git push origin HEAD:refs/heads/fix/building-permit-pdf-20261111
+          fi
