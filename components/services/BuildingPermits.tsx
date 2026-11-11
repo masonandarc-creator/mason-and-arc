@@ -26,11 +26,11 @@ const content = {
     note: "Permits are issued by the competent authorities. Requirements, processing times and approvals depend on the plot and the relevant authority.",
     contact: "Discuss your permit requirements",
     documentLabel: "Document reference",
-    documentHeading: "A building permit. Redacted for privacy.",
-    documentIntro: "A reference copy illustrating the format of a building permit. Identifying details, plot information and personal signatures have been removed.",
+    documentHeading: "Original building permit.",
+    documentIntro: "View the original, unaltered building permit document supplied for this reference.",
     openPdf: "Open reference PDF",
     downloadPdf: "Download PDF",
-    documentNote: "This redacted document is provided for illustration only. It does not demonstrate that Mason & Arc issued or obtained the permit.",
+    documentNote: "Published with the document owner’s permission. Provided as a reference only; this document does not establish that Mason & Arc obtained or issued the permit.",
   },
   ar: {
     back: "كل الخدمات",
@@ -52,11 +52,11 @@ const content = {
     note: "إصدار التراخيص من اختصاص الجهات الرسمية، وتختلف المتطلبات ومدد الإجراءات وقرارات الموافقة بحسب قطعة الأرض والجهاز المختص.",
     contact: "استفسر عن إجراءات ترخيص مشروعك",
     documentLabel: "مستند مرجعي",
-    documentHeading: "نموذج رخصة بناء بعد حجب البيانات.",
-    documentIntro: "نسخة مرجعية توضح شكل مستند ترخيص البناء، بعد إخفاء بيانات المالك وقطعة الأرض والتوقيعات وأي بيانات تعريفية خاصة.",
+    documentHeading: "رخصة البناء الأصلية.",
+    documentIntro: "يمكنك الاطلاع على ملف رخصة البناء الأصلي كما ورد إلينا، من دون حذف أو تعديل أي جزء منه.",
     openPdf: "فتح ملف PDF",
     downloadPdf: "تنزيل ملف PDF",
-    documentNote: "المستند للعرض التوضيحي فقط، ولا يُعد إثباتًا بأن Mason & Arc أصدر هذا الترخيص أو استخرجه.",
+    documentNote: "تم نشر المستند بموافقة صاحبه. يُعرض كمرجع توضيحي، ولا يعني أن Mason & Arc أصدر هذا الترخيص أو استخرجه.",
   },
   it: {
     back: "Tutti i servizi",
@@ -78,11 +78,11 @@ const content = {
     note: "I permessi sono rilasciati dalle autorità competenti. Requisiti, tempi e approvazioni dipendono dal lotto e dall'ente responsabile.",
     contact: "Parliamo del tuo permesso edilizio",
     documentLabel: "Documento di riferimento",
-    documentHeading: "Un permesso edilizio, con dati oscurati.",
-    documentIntro: "Una copia di riferimento che mostra il formato del permesso. Identificativi, dati del lotto e firme personali sono stati rimossi.",
+    documentHeading: "Permesso edilizio originale.",
+    documentIntro: "Consulta il documento originale del permesso edilizio, pubblicato senza oscuramenti o modifiche.",
     openPdf: "Apri il PDF",
     downloadPdf: "Scarica il PDF",
-    documentNote: "Il documento oscurato ha finalità esclusivamente illustrative e non dimostra che Mason & Arc abbia ottenuto o rilasciato questo permesso.",
+    documentNote: "Pubblicato con il consenso del titolare. Documento di riferimento, non prova che Mason & Arc abbia ottenuto o rilasciato il permesso.",
   },
 } as const;
 
@@ -154,7 +154,7 @@ export default function BuildingPermits() {
             <div className="mt-12 overflow-hidden border border-neutral-300 bg-white">
               <iframe
                 title={copy.documentHeading}
-                src="/docs/building-permit-reference.pdf#toolbar=0"
+                src="https://d2ol7oe51mr4n9.cloudfront.net/user_3HDVjjdApfFlxvKkHr2XjkIPjln/fef621af-20f1-4a23-b32a-658b59ea045a.pdf#toolbar=0"
                 className="h-[320px] w-full md:h-[520px] lg:h-[670px]"
                 loading="lazy"
               />
