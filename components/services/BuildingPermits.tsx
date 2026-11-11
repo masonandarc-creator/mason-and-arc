@@ -25,6 +25,12 @@ const content = {
     areas: ["6 October", "New October", "October Gardens", "Sheikh Zayed", "New Cairo / Fifth Settlement", "Beit Al Watan / North Rehab"],
     note: "Permits are issued by the competent authorities. Requirements, processing times and approvals depend on the plot and the relevant authority.",
     contact: "Discuss your permit requirements",
+    documentLabel: "Document reference",
+    documentHeading: "A building permit. Redacted for privacy.",
+    documentIntro: "A reference copy illustrating the format of a building permit. Identifying details, plot information and personal signatures have been removed.",
+    openPdf: "Open reference PDF",
+    downloadPdf: "Download PDF",
+    documentNote: "This redacted document is provided for illustration only. It does not demonstrate that Mason & Arc issued or obtained the permit.",
   },
   ar: {
     back: "كل الخدمات",
@@ -45,6 +51,12 @@ const content = {
     areas: ["مدينة 6 أكتوبر", "أكتوبر الجديدة", "حدائق أكتوبر", "الشيخ زايد", "القاهرة الجديدة / التجمع الخامس", "بيت الوطن / شمال الرحاب"],
     note: "إصدار التراخيص من اختصاص الجهات الرسمية، وتختلف المتطلبات ومدد الإجراءات وقرارات الموافقة بحسب قطعة الأرض والجهاز المختص.",
     contact: "استفسر عن إجراءات ترخيص مشروعك",
+    documentLabel: "مستند مرجعي",
+    documentHeading: "نموذج رخصة بناء بعد حجب البيانات.",
+    documentIntro: "نسخة مرجعية توضح شكل مستند ترخيص البناء، بعد إخفاء بيانات المالك وقطعة الأرض والتوقيعات وأي بيانات تعريفية خاصة.",
+    openPdf: "فتح ملف PDF",
+    downloadPdf: "تنزيل ملف PDF",
+    documentNote: "المستند للعرض التوضيحي فقط، ولا يُعد إثباتًا بأن Mason & Arc أصدر هذا الترخيص أو استخرجه.",
   },
   it: {
     back: "Tutti i servizi",
@@ -65,6 +77,12 @@ const content = {
     areas: ["6 October", "New October", "October Gardens", "Sheikh Zayed", "New Cairo / Fifth Settlement", "Beit Al Watan / North Rehab"],
     note: "I permessi sono rilasciati dalle autorità competenti. Requisiti, tempi e approvazioni dipendono dal lotto e dall'ente responsabile.",
     contact: "Parliamo del tuo permesso edilizio",
+    documentLabel: "Documento di riferimento",
+    documentHeading: "Un permesso edilizio, con dati oscurati.",
+    documentIntro: "Una copia di riferimento che mostra il formato del permesso. Identificativi, dati del lotto e firme personali sono stati rimossi.",
+    openPdf: "Apri il PDF",
+    downloadPdf: "Scarica il PDF",
+    documentNote: "Il documento oscurato ha finalità esclusivamente illustrative e non dimostra che Mason & Arc abbia ottenuto o rilasciato questo permesso.",
   },
 } as const;
 
@@ -123,6 +141,29 @@ export default function BuildingPermits() {
               <p className="mt-10 max-w-3xl text-sm font-light leading-7 text-white/50">{copy.note}</p>
               <Link href="/contact?service=building-permits" className="mt-12 inline-flex border-b border-white/60 pb-3 text-sm font-light text-white transition-colors hover:border-[#4F6B7A]">{copy.contact} ↗</Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-neutral-300 bg-[#f8f7f4] px-6 py-20 sm:px-8 md:px-10 md:py-28 lg:px-16">
+        <div className="mx-auto grid max-w-[1600px] gap-10 lg:grid-cols-[.28fr_1fr]">
+          <p className="text-[9px] uppercase tracking-[.3em] text-[#4F6B7A]">{copy.documentLabel}</p>
+          <div>
+            <h2 className="max-w-4xl text-[clamp(2.4rem,4.4vw,4.5rem)] font-extralight leading-[1.07] tracking-[-.045em]">{copy.documentHeading}</h2>
+            <p className="mt-8 max-w-3xl text-lg font-light leading-8 text-neutral-600">{copy.documentIntro}</p>
+            <div className="mt-12 overflow-hidden border border-neutral-300 bg-white">
+              <iframe
+                title={copy.documentHeading}
+                src="/docs/building-permit-reference.pdf#toolbar=0"
+                className="h-[320px] w-full md:h-[520px] lg:h-[670px]"
+                loading="lazy"
+              />
+            </div>
+            <div className="mt-8 flex flex-wrap items-center gap-x-10 gap-y-5">
+              <a href="/docs/building-permit-reference.pdf" target="_blank" rel="noopener noreferrer" className="border-b border-neutral-900 pb-2 text-sm font-light text-neutral-900 transition-colors hover:border-[#4F6B7A]">{copy.openPdf} ↗</a>
+              <a href="/docs/building-permit-reference.pdf" download="mason-arc-building-permit-reference.pdf" className="border-b border-neutral-900 pb-2 text-sm font-light text-neutral-900 transition-colors hover:border-[#4F6B7A]">{copy.downloadPdf} ↓</a>
+            </div>
+            <p className="mt-7 max-w-3xl text-xs font-light leading-6 text-neutral-500">{copy.documentNote}</p>
           </div>
         </div>
       </section>
