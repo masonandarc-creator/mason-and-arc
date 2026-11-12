@@ -29,7 +29,7 @@ const notoArabic = Noto_Sans_Arabic({
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.masonandarc.com"),
   title: { default: "Mason & Arc — Architecture Studio", template: "%s | Mason & Arc" },
-  description: "Mason & Arc is an architecture, design, and execution studio developing spaces through design, material, and delivery.",
+  description: "Mason & Arc is an architectural design studio specializing in architecture, interiors, and detailed design development, with delivery advisory available where required.",
   applicationName: "Mason & Arc",
   alternates: { canonical: "/" },
   openGraph: {
@@ -37,13 +37,13 @@ export const metadata: Metadata = {
     url: "/",
     siteName: "Mason & Arc",
     title: "Mason & Arc — Architecture Studio",
-    description: "Architecture, design, and execution by Mason & Arc.",
+    description: "Architecture, interiors, and detailed design development by Mason & Arc.",
     images: [{ url: "/images/hero.png", alt: "Mason & Arc — Architecture Studio" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Mason & Arc — Architecture Studio",
-    description: "Architecture, design, and execution by Mason & Arc.",
+    description: "Architecture, interiors, and detailed design development by Mason & Arc.",
     images: ["/images/hero.png"],
   },
 

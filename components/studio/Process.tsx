@@ -22,8 +22,8 @@ const steps = [
   },
   {
     number: "03",
-    title: "Build",
-    text: "Design moves into execution through precise coordination and attention to every element.",
+    title: "Coordinate",
+    text: "The design is resolved in detail, with delivery guidance and specialist coordination available when required.",
   },
   {
     number: "04",
@@ -216,7 +216,7 @@ export default function Process() {
                 text-neutral-400
               "
             >
-              Listen / Design / Build / Experience
+              Listen / Design / Coordinate / Experience
             </span>
 
             <span

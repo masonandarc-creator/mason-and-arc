@@ -72,7 +72,7 @@ export default function Loader() {
         </div>
 
         <p className="loading-text">
-          FROM DRAWING TO REALITY
+          FROM CONCEPT TO DETAIL
         </p>
       </div>
 

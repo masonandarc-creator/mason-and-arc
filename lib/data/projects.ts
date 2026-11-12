@@ -6,9 +6,9 @@ export const cityEdgeSections = [
     eyebrow: emptyText,
     title: { en: "Concept", ar: "الفكرة التصميمية", it: "Concept" },
     body: {
-      en: "Conceived as a vertical mixed-use destination, City Edge brings public, professional, clinical and residential life together within one clear architectural identity. The composition balances a grounded commercial base with lighter residential levels above.",
-      ar: "صُمم سيتي إيدج كوجهة رأسية متعددة الاستخدامات تجمع الحياة العامة والعمل والخدمات الطبية والسكن داخل هوية معمارية واحدة وواضحة. يوازن التكوين بين قاعدة تجارية راسخة وطوابق سكنية أكثر خفة في الأعلى.",
-      it: "City Edge è concepito come una destinazione verticale polifunzionale, capace di riunire vita pubblica, lavoro, servizi clinici e residenza in un’identità architettonica chiara. La composizione equilibra un basamento commerciale solido con livelli residenziali più leggeri.",
+      en: "City Edge is shaped by a clear relationship between program, circulation, façade, and spatial experience, expressed through one coherent architectural identity.",
+      ar: "يتشكل سيتي إيدج من علاقة واضحة بين البرنامج والحركة والواجهة والتجربة المكانية، ضمن هوية معمارية متماسكة.",
+      it: "City Edge nasce da una relazione chiara tra programma, circolazione, facciata ed esperienza spaziale, espressa attraverso un’identità architettonica coerente.",
     },
     hero_statement: emptyText,
     layout: "editorial" as const,
@@ -18,9 +18,9 @@ export const cityEdgeSections = [
         id: "city-edge-concept-board",
         image_url: "/images/projects/city-edge/city-edge-concept-board.jpg",
         caption: {
-          en: "City Edge — site geometry, yacht inspiration, and façade translation.",
-          ar: "سيتي إيدج — هندسة الموقع، وإلهام اليخوت، وترجمة الواجهة.",
-          it: "City Edge — geometria del sito, ispirazione nautica e traduzione della facciata.",
+          en: "City Edge — concept development and façade studies.",
+          ar: "سيتي إيدج — تطوير الفكرة ودراسات الواجهة.",
+          it: "City Edge — sviluppo del concept e studi di facciata.",
         },
         alt_text: {
           en: "City Edge concept board",
@@ -36,9 +36,9 @@ export const cityEdgeSections = [
     eyebrow: emptyText,
     title: { en: "Program", ar: "البرنامج", it: "Programma" },
     body: {
-      en: "Retail activates the lower levels, followed by offices and medical clinics, while the upper floors provide residential units. A rooftop pool and barbecue area complete the building as a shared destination rather than a collection of isolated uses.",
-      ar: "تنشّط المحلات التجارية الطوابق السفلية، تليها المكاتب والعيادات الطبية، بينما تضم الطوابق العليا الوحدات السكنية. ويكمل حمام السباحة ومنطقة الشواء على السطح المبنى كوجهة مشتركة بدلًا من أن يكون مجموعة استخدامات منفصلة.",
-      it: "Gli spazi commerciali animano i livelli inferiori, seguiti da uffici e cliniche mediche, mentre i piani superiori ospitano le residenze. La piscina e l’area barbecue in copertura completano l’edificio come destinazione condivisa, non come semplice somma di funzioni separate.",
+      en: "The design organizes the project’s different uses through clear circulation, considered transitions, and a unified architectural language.",
+      ar: "ينظم التصميم الاستخدامات المختلفة للمشروع من خلال حركة واضحة وانتقالات مدروسة ولغة معمارية موحّدة.",
+      it: "Il progetto organizza le diverse funzioni attraverso percorsi chiari, transizioni studiate e un linguaggio architettonico unitario.",
     },
     hero_statement: emptyText,
     layout: "editorial" as const,
@@ -48,11 +48,11 @@ export const cityEdgeSections = [
   {
     id: "scope",
     eyebrow: emptyText,
-    title: { en: "Scope", ar: "نطاق العمل", it: "Ambito" },
+    title: { en: "Design Scope", ar: "نطاق التصميم", it: "Ambito progettuale" },
     body: {
-      en: "Architecture\nFaçade\nMEP\nHVAC\nVertical Transportation\nInterior Finishing",
-      ar: "العمارة\nالواجهات\nأعمال MEP\nالتكييف والتهوية\nالنقل الرأسي\nالتشطيبات الداخلية",
-      it: "Architettura\nFacciata\nMEP\nHVAC\nTrasporto verticale\nFiniture interne",
+      en: "Architectural Design\nFaçade Design\nDesign Development\nExecution Supervision — at the client’s request",
+      ar: "التصميم المعماري\nتصميم الواجهات\nتطوير التصميم\nالإشراف على التنفيذ — بناءً على طلب العميل",
+      it: "Progettazione architettonica\nProgetto di facciata\nSviluppo del progetto\nSupervisione della realizzazione — su richiesta del cliente",
     },
     hero_statement: emptyText,
     layout: "editorial" as const,
@@ -65,7 +65,7 @@ export const cityEdgeSections = [
     title: { en: "Status", ar: "الحالة", it: "Stato" },
     body: {
       en: "Ongoing\nStarted 2025",
-      ar: "قيد التنفيذ\nبدأ في ٢٠٢٥",
+      ar: "جارٍ\nبدأ في ٢٠٢٥",
       it: "In corso\nAvviato nel 2025",
     },
     hero_statement: emptyText,
@@ -74,18 +74,18 @@ export const cityEdgeSections = [
     images: [],
   },
   {
-    id: "execution",
+    id: "execution-supervision",
     eyebrow: emptyText,
-    title: { en: "Execution", ar: "التنفيذ", it: "Esecuzione" },
+    title: { en: "Execution Supervision", ar: "الإشراف على التنفيذ", it: "Supervisione della realizzazione" },
     body: {
-      en: "City Edge is being delivered as a fully coordinated mixed-use development, bringing architectural design, building systems, façade construction, vertical transportation, mechanical and electrical works, and interior finishing together as one integrated process.",
-      ar: "يُنفَّذ سيتي إيدج كمشروع متعدد الاستخدامات متكامل التنسيق، يجمع التصميم المعماري وأنظمة المبنى وتنفيذ الواجهات والنقل الرأسي والأعمال الميكانيكية والكهربائية والتشطيبات الداخلية ضمن عملية واحدة متكاملة.",
-      it: "City Edge viene realizzato come sviluppo polifunzionale pienamente coordinato, riunendo progettazione architettonica, sistemi dell’edificio, facciate, trasporto verticale, impianti meccanici ed elettrici e finiture interne in un unico processo integrato.",
+      en: "At the client’s request, Mason & Arc provided execution supervision for City Edge, helping maintain the approved architectural vision throughout delivery.",
+      ar: "بناءً على طلب العميل، تولّى Mason & Arc الإشراف على تنفيذ سيتي إيدج للمساعدة في الحفاظ على الرؤية المعمارية المعتمدة خلال مرحلة التنفيذ.",
+      it: "Su richiesta del cliente, Mason & Arc ha supervisionato la realizzazione di City Edge, contribuendo a preservare la visione architettonica approvata durante questa fase.",
     },
     hero_statement: {
-      en: "From\nconcept\nto reality.",
-      ar: "من الفكرة\nإلى الواقع.",
-      it: "Dal concetto\nalla realtà.",
+      en: "Designed by us.\nSupervised on request.",
+      ar: "من تصميمنا.\nوالإشراف حسب الطلب.",
+      it: "Progettato da noi.\nSupervisionato su richiesta.",
     },
     layout: "editorial" as const,
     is_visible: true,
@@ -130,7 +130,7 @@ export const projects = [
     image: "/images/projects/city-edge/city-edge-exterior-wip.jpeg",
 
     description:
-      "City Edge is a landmark 12-storey mixed-use building in Fayoum City, Egypt, marking Mason & Arc’s first project in the country. It brings retail, offices, medical clinics, residential units, and rooftop amenities together within one integrated development.",
+      "City Edge is an architectural design project in Fayoum City, Egypt, developed around a clear relationship between program, circulation, façade, and spatial experience. Mason & Arc also provided execution supervision at the client’s request.",
 
     gallery: [
       "/images/projects/city-edge/city-edge-exterior-wip.jpeg",

@@ -131,7 +131,7 @@ try {
       [
         "USR-001",
         "Mason & Arc Owner",
-        "owner@masonandarc.com",
+        "Masonandarc@gmail.com",
         hash,
         "Owner",
       ]

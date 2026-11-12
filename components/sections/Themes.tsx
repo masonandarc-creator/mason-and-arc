@@ -4,17 +4,32 @@ import Link from "next/link";
 import Reveal from "@/components/animations/Reveal";
 import Container from "@/components/shared/Container";
 import SecondaryLogo from "@/components/shared/SecondaryLogo";
+import { useLocale } from "@/components/i18n/LocaleProvider";
 
-const themes = [
-  "Architecture",
-  "Interior Design",
-  "Design Development",
-  "Execution",
-  "Research",
-  "Collaboration",
-];
+const themesCopy = {
+  en: {
+    label: "04 — Explore",
+    title: ["Explore", "more."],
+    themes: ["Architecture", "Interior Design", "Design Development", "Delivery Advisory"],
+    end: "05 — End",
+  },
+  ar: {
+    label: "04 — استكشف",
+    title: ["استكشف", "المزيد."],
+    themes: ["العمارة", "التصميم الداخلي", "تطوير التصميم", "استشارات التنفيذ"],
+    end: "05 — النهاية",
+  },
+  it: {
+    label: "04 — Esplora",
+    title: ["Scopri", "di più."],
+    themes: ["Architettura", "Interior Design", "Sviluppo del progetto", "Consulenza alla realizzazione"],
+    end: "05 — Fine",
+  },
+} as const;
 
 export default function Themes() {
+  const { locale } = useLocale();
+  const copy = themesCopy[locale];
   return (
     <section className="border-t border-neutral-300 bg-[#f8f7f4] text-neutral-900">
       <Container
@@ -50,7 +65,7 @@ export default function Themes() {
                 text-neutral-400
               "
             >
-              04 — Explore
+              {copy.label}
             </span>
           </Reveal>
 
@@ -68,9 +83,9 @@ export default function Themes() {
                 xl:text-[135px]
               "
             >
-              Explore
+              {copy.title[0]}
               <br />
-              more.
+              {copy.title[1]}
             </h2>
           </Reveal>
         </div>
@@ -78,7 +93,7 @@ export default function Themes() {
         {/* THEMES */}
 
         <div className="mt-24 border-t border-neutral-300 md:mt-36">
-          {themes.map((theme, index) => (
+          {copy.themes.map((theme, index) => (
             <Reveal key={theme}>
               <Link
                 href="/services"
@@ -167,7 +182,7 @@ export default function Themes() {
                 text-neutral-400
               "
             >
-              05 — End
+              {copy.end}
             </span>
           </div>
         </Reveal>

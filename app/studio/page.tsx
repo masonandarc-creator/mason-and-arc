@@ -4,7 +4,7 @@ import Philosophy from "@/components/studio/Philosophy";
 import Process from "@/components/studio/Process";
 
 export const metadata: Metadata = {
-  title: "Studio | Mason & Arc",
+  title: "Studio",
   description: "Inside the Mason & Arc studio, process, philosophy, and approach.",
   alternates: { canonical: "/studio" },
 };

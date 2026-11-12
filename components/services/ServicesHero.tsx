@@ -4,36 +4,63 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import Reveal from "@/components/animations/Reveal";
 import Container from "@/components/shared/Container";
+import { useLocale } from "@/components/i18n/LocaleProvider";
 
-const services = [
-  {
-    number: "01",
-    title: "Architecture",
-    description:
-      "Architectural concepts and complete design solutions shaped around context, function, and timeless form.",
+const servicesPageCopy = {
+  en: {
+    hero: ["Design.", "Develop.", "Realize."],
+    introPrimary: "We approach architecture as a complete design process — from the first idea through detailed development and coordination.",
+    introSecondary: "From concept to detailed design, we shape each project with clarity and precision. Where required, we support delivery through carefully selected specialist partners.",
+    scroll: "Scroll to explore",
+    sectionLabel: "01 — Services",
+    heading: ["Architecture,", "interiors,", "design and advisory."],
+    experience: "02 — Experience",
+    next: "Next",
+    services: [
+      { number: "01", title: "Architecture", description: "Architectural concepts and complete design solutions shaped around context, function, and timeless form." },
+      { number: "02", title: "Interior Design", description: "Interior spaces developed through material, proportion, light, and a clear relationship between architecture and experience." },
+      { number: "03", title: "Design Development", description: "From concept to detailed design, we develop every element with precision, clarity, and attention to detail." },
+      { number: "04", title: "Design & Delivery Advisory", description: "Where required, we advise on the selection and coordination of specialist delivery partners, helping carry the architectural vision through to realization with clarity and care." },
+    ],
   },
-  {
-    number: "02",
-    title: "Interior Design",
-    description:
-      "Interior spaces developed through material, proportion, light, and a clear relationship between architecture and experience.",
+  ar: {
+    hero: ["تصميم.", "تطوير.", "تحقيق."],
+    introPrimary: "نتعامل مع العمارة كعملية تصميم متكاملة — من الفكرة الأولى إلى التطوير التفصيلي والتنسيق.",
+    introSecondary: "من الفكرة إلى التصميم التفصيلي، نطوّر كل مشروع بوضوح ودقة. وعند الحاجة، ندعم مرحلة التنفيذ من خلال شركاء متخصصين يتم اختيارهم بعناية.",
+    scroll: "مرّر للاستكشاف",
+    sectionLabel: "01 — الخدمات",
+    heading: ["العمارة،", "والتصميم الداخلي،", "والتطوير والاستشارات."],
+    experience: "02 — الخبرة",
+    next: "التالي",
+    services: [
+      { number: "01", title: "العمارة", description: "أفكار معمارية وحلول تصميم متكاملة تتشكل وفقًا للسياق والوظيفة والشكل الخالد." },
+      { number: "02", title: "التصميم الداخلي", description: "فراغات داخلية تتطور من خلال الخامات والنِسب والضوء والعلاقة الواضحة بين العمارة وتجربة المكان." },
+      { number: "03", title: "تطوير التصميم", description: "من الفكرة إلى التصميم التفصيلي، نطوّر كل عنصر بدقة ووضوح واهتمام بالتفاصيل." },
+      { number: "04", title: "استشارات التصميم ودعم التنفيذ", description: "عند الحاجة، نقدم المشورة في اختيار وتنسيق شركاء تنفيذ متخصصين، للمساعدة في تحقيق الرؤية المعمارية بوضوح وعناية." },
+    ],
   },
-  {
-    number: "03",
-    title: "Design Development",
-    description:
-      "From concept to detailed design, we develop every element with precision, clarity, and attention to detail.",
+  it: {
+    hero: ["Progettare.", "Sviluppare.", "Realizzare."],
+    introPrimary: "Affrontiamo l’architettura come un processo progettuale completo — dalla prima idea allo sviluppo del dettaglio e al coordinamento.",
+    introSecondary: "Dal concept al progetto dettagliato, sviluppiamo ogni intervento con chiarezza e precisione. Quando richiesto, supportiamo la realizzazione attraverso partner specialistici selezionati con cura.",
+    scroll: "Scorri per esplorare",
+    sectionLabel: "01 — Servizi",
+    heading: ["Architettura,", "interni,", "progetto e consulenza."],
+    experience: "02 — Esperienza",
+    next: "Avanti",
+    services: [
+      { number: "01", title: "Architettura", description: "Concept architettonici e soluzioni progettuali complete, definite dal contesto, dalla funzione e da forme senza tempo." },
+      { number: "02", title: "Interior Design", description: "Spazi interni sviluppati attraverso materia, proporzione, luce e una relazione chiara tra architettura ed esperienza." },
+      { number: "03", title: "Sviluppo del progetto", description: "Dal concept al progetto dettagliato, sviluppiamo ogni elemento con precisione, chiarezza e attenzione al dettaglio." },
+      { number: "04", title: "Consulenza al progetto e alla realizzazione", description: "Quando richiesto, affianchiamo il cliente nella selezione e nel coordinamento di partner specialistici, preservando con chiarezza e cura la visione architettonica." },
+    ],
   },
-  {
-    number: "04",
-    title: "Design & Delivery Advisory",
-    description:
-      "Where required, we advise on the selection and coordination of specialist delivery partners, helping carry the architectural vision through to realization with clarity and care.",
-  },
-];
+} as const;
 
 export default function ServicesHero() {
   const servicesRef = useRef<HTMLDivElement>(null);
+  const { locale } = useLocale();
+  const pageCopy = servicesPageCopy[locale];
 
   useEffect(() => {
     if (!servicesRef.current) return;
@@ -123,11 +150,9 @@ export default function ServicesHero() {
                     xl:text-[165px]
                   "
                 >
-                  <span className="block">Design.</span>
-
-                  <span className="block">Build.</span>
-
-                  <span className="block">Experience.</span>
+                  {pageCopy.hero.map((line) => (
+                    <span key={line} className="block">{line}</span>
+                  ))}
                 </h1>
 
 
@@ -144,8 +169,7 @@ export default function ServicesHero() {
                     lg:mt-14
                   "
                 >
-                  We approach architecture as a complete process — from the
-                  first idea and design development to the final built space.
+                  {pageCopy.introPrimary}
                 </p>
 
               </div>
@@ -180,9 +204,7 @@ export default function ServicesHero() {
                       md:text-[22px]
                     "
                   >
-                    From concept to completion, we bring design and execution
-                    together to create spaces that are considered, precise,
-                    and built to last.
+                    {pageCopy.introSecondary}
                   </p>
 
 
@@ -211,7 +233,7 @@ export default function ServicesHero() {
                         text-neutral-500
                       "
                     >
-                      Scroll to explore
+                      {pageCopy.scroll}
                     </span>
 
                   </div>
@@ -277,7 +299,7 @@ export default function ServicesHero() {
                   text-neutral-400
                 "
               >
-                01 — Services
+                {pageCopy.sectionLabel}
               </span>
             </div>
 
@@ -294,11 +316,9 @@ export default function ServicesHero() {
                 lg:text-[78px]
               "
             >
-              Architecture,
-              <br />
-              interior,
-              <br />
-              design and execution.
+              {pageCopy.heading.map((line) => (
+                <span key={line} className="block">{line}</span>
+              ))}
             </h2>
 
           </div>
@@ -310,7 +330,7 @@ export default function ServicesHero() {
 
           <div className="border-t border-neutral-300">
 
-            {services.map((service) => (
+            {pageCopy.services.map((service) => (
 
               <div
                 key={service.number}
@@ -460,7 +480,7 @@ export default function ServicesHero() {
                 text-neutral-400
               "
             >
-              02 — Experience
+              {pageCopy.experience}
             </span>
 
 
@@ -472,7 +492,7 @@ export default function ServicesHero() {
                 text-neutral-400
               "
             >
-              Next
+              {pageCopy.next}
             </span>
 
           </div>

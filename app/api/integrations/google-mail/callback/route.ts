@@ -13,6 +13,12 @@ function callbackUri(request: Request) {
   return configuredUri || `${origin}/api/integrations/google-mail/callback`;
 }
 
+function settingsErrorUrl(request: Request, error: string) {
+  const url = new URL("/app/admin/settings", request.url);
+  url.searchParams.set("google_mail_error", error);
+  return url;
+}
+
 export async function GET(request: Request) {
   try {
     const user = await requireServerUser(["Owner"]);
@@ -22,9 +28,9 @@ export async function GET(request: Request) {
     const jar = await cookies();
     const expectedState = jar.get("mason_arc_google_mail_state")?.value;
     jar.set("mason_arc_google_mail_state", "", { httpOnly: true, path: "/", maxAge: 0 });
-    if (!state || !expectedState || state !== expectedState) return NextResponse.json({ error: "This Google Mail connection request expired. Start again from Connect Gmail." }, { status: 400 });
-    if (url.searchParams.has("error")) return NextResponse.json({ error: "Google authorization was not granted. Start again from Connect Gmail when ready." }, { status: 400 });
-    if (!code) return NextResponse.json({ error: "Google did not return an authorization code. Start again from Connect Gmail." }, { status: 400 });
+    if (!state || !expectedState || state !== expectedState) return NextResponse.redirect(settingsErrorUrl(request, "expired"));
+    if (url.searchParams.has("error")) return NextResponse.redirect(settingsErrorUrl(request, "authorization_denied"));
+    if (!code) return NextResponse.redirect(settingsErrorUrl(request, "authorization_failed"));
     const clientId = process.env.GOOGLE_OAUTH_CLIENT_ID;
     const clientSecret = process.env.GOOGLE_OAUTH_CLIENT_SECRET;
     const redirectUri = callbackUri(request);
@@ -35,7 +41,7 @@ export async function GET(request: Request) {
     return NextResponse.redirect(new URL("/app/admin/settings?google_mail=connected", request.url));
   } catch (error) {
     if (error instanceof GoogleMailOAuthError) {
-      return NextResponse.json({ error: error.message }, { status: 400 });
+      return NextResponse.redirect(settingsErrorUrl(request, error.code));
     }
     if (error instanceof Error && (error.message === "UNAUTHENTICATED" || error.message === "FORBIDDEN")) {
       return NextResponse.json({ error: "Sign in as the studio Owner and start again from Connect Gmail." }, { status: error.message === "FORBIDDEN" ? 403 : 401 });

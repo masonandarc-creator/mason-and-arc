@@ -22,7 +22,7 @@ const users: AuthUser[] = [
   {
     id: "USR-001",
     name: "Mason & Arc Owner",
-    email: "owner@masonandarc.com",
+    email: "Masonandarc@gmail.com",
     role: "Owner",
     active: true,
   },

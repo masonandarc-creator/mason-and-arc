@@ -18,6 +18,4 @@ CREATE TABLE IF NOT EXISTS user_login_aliases (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 CREATE INDEX IF NOT EXISTS user_login_aliases_user_idx ON user_login_aliases(user_id);
-INSERT INTO user_login_aliases(email,user_id)
-SELECT 'owner@masonandarc.com', id FROM users WHERE lower(email)='masonandarc@gmail.com'
-ON CONFLICT (email) DO UPDATE SET user_id=EXCLUDED.user_id;
+DELETE FROM user_login_aliases WHERE lower(email)='owner@masonandarc.com';

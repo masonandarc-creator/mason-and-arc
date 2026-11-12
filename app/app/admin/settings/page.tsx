@@ -41,6 +41,18 @@ export default function SettingsPage() {
 
   useEffect(() => {
     setSettings(getStudioSettings());
+    const googleMailError = new URLSearchParams(window.location.search).get(
+      "google_mail_error"
+    );
+    if (googleMailError === "missing_send_scope") {
+      setGmailError(
+        "Gmail is not connected yet. Choose Reconnect Gmail, then tick the permission that allows Mason & Arc to send email on your behalf before continuing."
+      );
+    } else if (googleMailError) {
+      setGmailError(
+        "Gmail connection was not completed. Choose Connect Gmail and approve every requested permission."
+      );
+    }
     loadOrganization();
     fetch("/api/integrations/google-mail/status", { cache: "no-store" })
       .then(async (response) => {
@@ -385,6 +397,13 @@ export default function SettingsPage() {
               </p>
             )}
             {gmailError && <p className="mt-4 text-sm text-red-600" role="alert">{gmailError}</p>}
+            {!gmail?.authorized && (
+              <p className="mt-2 text-sm leading-6 text-black/60">
+                When Google opens, select the studio Gmail account and tick the
+                permission to send email on your behalf. This permission is
+                required for password-reset and inquiry emails.
+              </p>
+            )}
             {calendar && <p className="mt-2 break-words text-sm" role="status">{calendar.authorized ? `Google Calendar is connected for ${calendar.email}.` : "Google Calendar is ready to connect."}</p>}
             <p className="mt-3 text-sm leading-6 text-black/60">WhatsApp: free manual Click to Chat is available from this page. Automated API messaging remains disabled and no paid messaging service has been activated.</p>
           </section>

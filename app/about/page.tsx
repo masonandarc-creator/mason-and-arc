@@ -1,41 +1,110 @@
-import type { Metadata } from "next";
+"use client";
+
 import Link from "next/link";
+import { useLocale } from "@/components/i18n/LocaleProvider";
 
-const services = [
-  {
-    number: "01",
-    title: "Architecture",
-    text: "Our architectural work focuses on creating buildings that respond to their surroundings while establishing a clear identity of their own. Form, proportion, structure, material, light, and landscape are considered together to create architecture that is both expressive and purposeful.",
+const aboutCopy = {
+  en: {
+    eyebrow: "About",
+    hero: ["Designing", "spaces that", "last."],
+    practiceLabel: "Professional practice in Italy",
+    historyLead: "Mason & Arc is informed by professional experience developed in Italy since 2015, including contributions to and supervision of major projects across different scales and contexts.",
+    historyBody: "This experience shaped a rigorous understanding of architecture, detailed coordination, material quality, and the relationship between design intent and the completed space.",
+    country: "Italy",
+    since: "From 2015",
+    experience: "Years of professional practice in Italy, including the supervision of major projects, inform the precision and attention to detail behind the studio today.",
+    chapterLabel: "A new chapter",
+    chapterTitle: ["A new", "chapter"],
+    chapterLead: "A new, independent architectural design studio based in Egypt.",
+    chapterBody: "This experience now informs a new and independent chapter based in Egypt. Mason & Arc focuses on architecture, interiors, and detailed design development for projects in Egypt and internationally, with delivery advisory and execution supervision available selectively when requested.",
+    approachLabel: "Our Approach",
+    approachLead: "Our approach begins with understanding the relationship between people, space, context, and purpose.",
+    approachBody: "Every project is considered as an opportunity to create environments that are not only visually distinctive, but also functional, considered, and capable of responding to the way people actually live, work, and interact with their surroundings. From the earliest concept to the development of materials, details, and spatial experience, design decisions are approached as part of one connected process.",
+    servicesLabel: "What we do",
+    servicesTitle: "Services",
+    closingTitle: ["Places with", "character.", "Purpose.", "Lasting value."],
+    closingBody: "Our ambition is not simply to produce buildings or interiors, but to create places with character, purpose, and lasting value — environments where architecture, interior, exterior, and landscape come together as one considered experience.",
+    ctaLabel: "Start a project",
+    ctaTitle: ["Let's", "design."],
+    ctaLink: "Get in touch",
+    services: [
+      ["Architecture", "Our architectural work focuses on creating buildings that respond to their surroundings while establishing a clear identity of their own. Form, proportion, structure, material, light, and landscape are considered together to create architecture that is both expressive and purposeful."],
+      ["Interior Design", "Interior design is approached as an extension of architecture. Rather than treating interiors as isolated spaces, we develop environments where circulation, materials, lighting, furniture, textures, and architectural elements work together to create a coherent experience."],
+      ["Design Development", "From concept to detailed design, we develop every element with precision, clarity, and careful attention to material, proportion, and constructability."],
+      ["Design & Delivery Advisory", "Where required, we advise on the selection and coordination of specialist delivery partners. Execution supervision is available selectively when requested by the client."],
+    ],
   },
-  {
-    number: "02",
-    title: "Interior Design",
-    text: "Interior design is approached as an extension of architecture. Rather than treating interiors as isolated spaces, we develop environments where circulation, materials, lighting, furniture, textures, and architectural elements work together to create a coherent experience.",
+  ar: {
+    eyebrow: "عن الاستوديو",
+    hero: ["نصمّم", "مساحات", "تدوم."],
+    practiceLabel: "خبرة مهنية في إيطاليا",
+    historyLead: "تستند Mason & Arc إلى خبرة مهنية تطورت في إيطاليا منذ عام 2015، وشملت المشاركة في مشروعات كبيرة والإشراف على تنفيذها عبر مقاييس وسياقات مختلفة.",
+    historyBody: "شكّلت هذه الخبرة فهمًا دقيقًا للعمارة والتنسيق التفصيلي وجودة الخامات والعلاقة بين الفكرة التصميمية والفراغ بعد اكتماله.",
+    country: "إيطاليا",
+    since: "منذ 2015",
+    experience: "سنوات من الممارسة المهنية في إيطاليا، بما في ذلك الإشراف على مشروعات كبيرة، تقف خلف الدقة والاهتمام بالتفاصيل اللذين يميزان الاستوديو اليوم.",
+    chapterLabel: "فصل جديد",
+    chapterTitle: ["فصل", "جديد"],
+    chapterLead: "استوديو مستقل وجديد للتصميم المعماري مقره مصر.",
+    chapterBody: "تشكل هذه الخبرة اليوم أساس فصل جديد ومستقل مقره مصر. تركز Mason & Arc على العمارة والتصميم الداخلي والتطوير التفصيلي لمشروعات في مصر ودوليًا، مع تقديم استشارات التنفيذ والإشراف عليه بصورة اختيارية عند طلب العميل.",
+    approachLabel: "منهجنا",
+    approachLead: "يبدأ منهجنا بفهم العلاقة بين الإنسان والفراغ والسياق والغرض.",
+    approachBody: "نتعامل مع كل مشروع كفرصة لصنع بيئات مميزة بصريًا وعملية ومدروسة، تستجيب لطريقة عيش الناس وعملهم وتفاعلهم مع محيطهم. ومن الفكرة الأولى إلى تطوير الخامات والتفاصيل والتجربة المكانية، نتعامل مع قرارات التصميم باعتبارها عملية واحدة مترابطة.",
+    servicesLabel: "ما نقدمه",
+    servicesTitle: "الخدمات",
+    closingTitle: ["أماكن ذات", "شخصية.", "وهدف.", "وقيمة تدوم."],
+    closingBody: "طموحنا ليس مجرد إنتاج مبانٍ أو فراغات داخلية، بل صنع أماكن ذات شخصية وهدف وقيمة تدوم، حيث تجتمع العمارة والداخل والخارج واللاندسكيب في تجربة واحدة مدروسة.",
+    ctaLabel: "ابدأ مشروعًا",
+    ctaTitle: ["لنصمّم", "معًا."],
+    ctaLink: "تواصل معنا",
+    services: [
+      ["العمارة", "نصمم مباني تستجيب لمحيطها وتؤسس في الوقت نفسه هوية واضحة خاصة بها. ندرس الشكل والنِسب والإنشاء والخامات والضوء واللاندسكيب معًا لصنع عمارة معبّرة وهادفة."],
+      ["التصميم الداخلي", "نتعامل مع التصميم الداخلي كامتداد للعمارة، بحيث تعمل الحركة والخامات والإضاءة والأثاث والملمس والعناصر المعمارية معًا لتكوين تجربة متماسكة."],
+      ["تطوير التصميم", "من الفكرة إلى التصميم التفصيلي، نطوّر كل عنصر بدقة ووضوح واهتمام بالخامات والنِسب وقابلية التنفيذ."],
+      ["استشارات التصميم والتنفيذ", "عند الحاجة، نقدم المشورة في اختيار وتنسيق شركاء تنفيذ متخصصين. ويتاح الإشراف على التنفيذ بصورة اختيارية عند طلب العميل."],
+    ],
   },
-  {
-    number: "03",
-    title: "Exterior Design",
-    text: "The spaces between buildings are as important as the buildings themselves. Our exterior design work considers landscape, circulation, planting, outdoor living, lighting, materials, and the relationship between architecture and its surrounding environment.",
+  it: {
+    eyebrow: "Studio",
+    hero: ["Progettiamo", "spazi che", "durano."],
+    practiceLabel: "Esperienza professionale in Italia",
+    historyLead: "Mason & Arc si fonda su un’esperienza professionale maturata in Italia dal 2015, che comprende il contributo e la supervisione alla realizzazione di importanti progetti di scale e contesti diversi.",
+    historyBody: "Questa esperienza ha costruito una conoscenza rigorosa dell’architettura, del coordinamento di dettaglio, della qualità dei materiali e del rapporto tra intento progettuale e spazio realizzato.",
+    country: "Italia",
+    since: "Dal 2015",
+    experience: "Gli anni di pratica professionale in Italia, compresa la supervisione di importanti progetti, guidano oggi la precisione e l’attenzione al dettaglio dello studio.",
+    chapterLabel: "Un nuovo capitolo",
+    chapterTitle: ["Un nuovo", "capitolo"],
+    chapterLead: "Un nuovo studio indipendente di progettazione architettonica con sede in Egitto.",
+    chapterBody: "Questa esperienza informa oggi un nuovo capitolo indipendente con sede in Egitto. Mason & Arc si concentra su architettura, interni e sviluppo dettagliato del progetto in Egitto e a livello internazionale, con consulenza alla realizzazione e supervisione dei lavori disponibili in modo selettivo su richiesta del cliente.",
+    approachLabel: "Il nostro approccio",
+    approachLead: "Il nostro approccio parte dalla comprensione del rapporto tra persone, spazio, contesto e funzione.",
+    approachBody: "Ogni progetto è un’opportunità per creare ambienti non solo riconoscibili, ma anche funzionali, misurati e capaci di rispondere al modo in cui le persone vivono, lavorano e interagiscono con ciò che le circonda. Dal primo concept allo sviluppo di materiali, dettagli ed esperienza spaziale, ogni decisione fa parte di un unico processo coerente.",
+    servicesLabel: "Cosa facciamo",
+    servicesTitle: "Servizi",
+    closingTitle: ["Luoghi con", "carattere.", "Scopo.", "Valore duraturo."],
+    closingBody: "La nostra ambizione non è semplicemente produrre edifici o interni, ma creare luoghi con carattere, scopo e valore duraturo, dove architettura, interni, esterni e paesaggio diventano un’unica esperienza consapevole.",
+    ctaLabel: "Inizia un progetto",
+    ctaTitle: ["Progettiamo", "insieme."],
+    ctaLink: "Contattaci",
+    services: [
+      ["Architettura", "Progettiamo edifici che rispondono al contesto e, allo stesso tempo, definiscono una propria identità. Forma, proporzione, struttura, materia, luce e paesaggio vengono considerati insieme per creare un’architettura espressiva e consapevole."],
+      ["Interior Design", "Affrontiamo gli interni come estensione dell’architettura, coordinando percorsi, materiali, luce, arredi, texture ed elementi architettonici in un’esperienza coerente."],
+      ["Sviluppo del progetto", "Dal concept al progetto di dettaglio, sviluppiamo ogni elemento con precisione, chiarezza e attenzione a materiali, proporzioni e fattibilità."],
+      ["Consulenza al progetto e alla realizzazione", "Quando richiesto, assistiamo nella selezione e nel coordinamento di partner specializzati. La supervisione dei lavori è disponibile in modo selettivo su richiesta del cliente."],
+    ],
   },
-  {
-    number: "04",
-    title: "Urban Planning",
-    text: "At a larger scale, Mason & Arc works with the relationships between buildings, public spaces, movement, landscape, and the wider city. Urban planning allows individual projects to become part of a larger and more connected environment.",
-  },
-  {
-    number: "05",
-    title: "Research",
-    text: "Research is an important part of the design process. We investigate materials, technologies, spatial strategies, environmental conditions, and emerging ways of living and working in order to develop solutions that are relevant to each project's specific context.",
-  },
-];
-
-export const metadata: Metadata = {
-  title: "About | Mason & Arc",
-  description: "About Mason & Arc — architecture, design, and execution.",
-  alternates: { canonical: "/about" },
-};
+} as const;
 
 export default function AboutPage() {
+  const { locale } = useLocale();
+  const copy = aboutCopy[locale];
+  const services = copy.services.map(([title, text], index) => ({
+    number: String(index + 1).padStart(2, "0"),
+    title,
+    text,
+  }));
+
   return (
     <main className="bg-white text-black">
 
@@ -48,7 +117,7 @@ export default function AboutPage() {
 
           <div className="lg:col-span-3">
             <p className="text-[9px] uppercase tracking-[0.25em] text-black/50">
-              About
+              {copy.eyebrow}
             </p>
           </div>
 
@@ -68,11 +137,11 @@ export default function AboutPage() {
                 xl:text-[175px]
               "
             >
-              Designing
+              {copy.hero[0]}
               <br />
-              spaces that
+              {copy.hero[1]}
               <br />
-              last.
+              {copy.hero[2]}
             </h1>
           </div>
 
@@ -97,11 +166,11 @@ export default function AboutPage() {
                 md:text-[100px]
               "
             >
-              2001
+              2015
             </div>
 
             <p className="mt-4 text-[9px] uppercase tracking-[0.2em] text-black/50">
-              Founded in Italy
+              {copy.practiceLabel}
             </p>
           </div>
 
@@ -117,10 +186,7 @@ export default function AboutPage() {
                 lg:text-[42px]
               "
             >
-              Mason & Arc was founded in Italy in 2001, with a commitment to
-              creating architecture and interiors that combine strong design
-              thinking with careful attention to detail, materiality, and the
-              experience of space.
+              {copy.historyLead}
             </p>
 
             <p
@@ -133,10 +199,7 @@ export default function AboutPage() {
                 md:text-[16px]
               "
             >
-              Over the years, the practice has developed a diverse body of
-              work spanning more than 350 projects across interior and exterior
-              environments, building an extensive experience across different
-              scales, contexts, and design challenges.
+              {copy.historyBody}
             </p>
 
           </div>
@@ -145,7 +208,7 @@ export default function AboutPage() {
 
 
       {/* =====================================================
-          350+
+          PROFESSIONAL EXPERIENCE
       ===================================================== */}
 
       <section className="bg-black px-6 py-28 text-white md:px-10 md:py-40">
@@ -164,19 +227,17 @@ export default function AboutPage() {
                 lg:text-[360px]
               "
             >
-              350+
+              {copy.country}
             </div>
           </div>
 
           <div className="lg:col-span-3 lg:col-start-10">
             <p className="text-[10px] uppercase tracking-[0.25em] text-white/50">
-              Projects
+              {copy.since}
             </p>
 
             <p className="mt-5 text-[14px] leading-[1.55] text-white/75 md:text-[16px]">
-              More than three hundred and fifty projects across interior and
-              exterior environments have shaped the experience and approach of
-              Mason & Arc.
+              {copy.experience}
             </p>
           </div>
 
@@ -185,7 +246,7 @@ export default function AboutPage() {
 
 
       {/* =====================================================
-          ITALY → EGYPT
+          A NEW CHAPTER IN EGYPT
       ===================================================== */}
 
       <section className="px-6 py-28 md:px-10 md:py-40">
@@ -194,7 +255,7 @@ export default function AboutPage() {
           <div className="lg:col-span-8">
 
             <p className="mb-8 text-[9px] uppercase tracking-[0.25em] text-black/45">
-              A new chapter
+              {copy.chapterLabel}
             </p>
 
             <h2
@@ -210,11 +271,9 @@ export default function AboutPage() {
                 lg:text-[170px]
               "
             >
-              Italy
+              {copy.chapterTitle[0]}
               <br />
-              <span className="text-black/25">→</span>
-              <br />
-              Egypt
+              {copy.chapterTitle[1]}
             </h2>
 
           </div>
@@ -231,14 +290,11 @@ export default function AboutPage() {
                   md:text-[32px]
                 "
               >
-                From our first studio in Italy to our new presence in Egypt.
+                {copy.chapterLead}
               </p>
 
               <p className="mt-8 text-[14px] leading-[1.6] text-black/65 md:text-[16px]">
-                Today, Mason & Arc brings this experience to a new chapter with
-                the opening of its first branch in Egypt, extending the practice
-                beyond its Italian origins while maintaining the same design
-                approach, standards, and attention to detail.
+                {copy.chapterBody}
               </p>
 
             </div>
@@ -257,7 +313,7 @@ export default function AboutPage() {
 
           <div className="lg:col-span-3">
             <p className="text-[9px] uppercase tracking-[0.25em] text-black/50">
-              Our Approach
+              {copy.approachLabel}
             </p>
           </div>
 
@@ -273,8 +329,7 @@ export default function AboutPage() {
                 lg:text-[56px]
               "
             >
-              Our approach begins with understanding the relationship between
-              people, space, context, and purpose.
+              {copy.approachLead}
             </p>
 
             <p
@@ -287,13 +342,7 @@ export default function AboutPage() {
                 md:text-[17px]
               "
             >
-              Every project is considered as an opportunity to create
-              environments that are not only visually distinctive, but also
-              functional, considered, and capable of responding to the way
-              people actually live, work, and interact with their surroundings.
-              From the earliest concept to the development of materials,
-              details, and spatial experience, design decisions are approached
-              as part of one connected process.
+              {copy.approachBody}
             </p>
 
           </div>
@@ -311,7 +360,7 @@ export default function AboutPage() {
 
           <div>
             <p className="text-[9px] uppercase tracking-[0.25em] text-black/45">
-              What we do
+              {copy.servicesLabel}
             </p>
 
             <h2
@@ -328,12 +377,12 @@ export default function AboutPage() {
                 lg:text-[150px]
               "
             >
-              Services
+              {copy.servicesTitle}
             </h2>
           </div>
 
           <span className="hidden text-[9px] uppercase tracking-[0.2em] text-black/40 md:block">
-            01 — 05
+            01 — 04
           </span>
 
         </div>
@@ -426,13 +475,13 @@ export default function AboutPage() {
                 lg:text-[155px]
               "
             >
-              Places with
+              {copy.closingTitle[0]}
               <br />
-              character.
+              {copy.closingTitle[1]}
               <br />
-              Purpose.
+              {copy.closingTitle[2]}
               <br />
-              Lasting value.
+              {copy.closingTitle[3]}
             </h2>
 
           </div>
@@ -440,10 +489,7 @@ export default function AboutPage() {
           <div className="lg:col-span-3 lg:col-start-10 lg:flex lg:items-end">
 
             <p className="text-[14px] leading-[1.65] text-white/60 md:text-[16px]">
-              Our ambition is not simply to produce buildings or interiors,
-              but to create places with character, purpose, and lasting value —
-              environments where architecture, interior, exterior, and
-              landscape come together as one considered experience.
+              {copy.closingBody}
             </p>
 
           </div>
@@ -463,7 +509,7 @@ export default function AboutPage() {
           <div>
 
             <p className="text-[9px] uppercase tracking-[0.25em] text-black/45">
-              Start a project
+              {copy.ctaLabel}
             </p>
 
             <h2
@@ -480,9 +526,9 @@ export default function AboutPage() {
                 lg:text-[140px]
               "
             >
-              Let&apos;s
+              {copy.ctaTitle[0]}
               <br />
-              build.
+              {copy.ctaTitle[1]}
             </h2>
 
           </div>
@@ -504,7 +550,7 @@ export default function AboutPage() {
               hover:opacity-50
             "
           >
-            Get in touch
+            {copy.ctaLink}
             <span className="text-base">↗</span>
           </Link>
 

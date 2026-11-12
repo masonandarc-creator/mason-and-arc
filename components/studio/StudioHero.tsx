@@ -147,7 +147,7 @@ export default function StudioHero() {
                   text-neutral-500
                 "
               >
-                Architecture / Design / Execution
+                Architecture / Interiors / Design Development
               </span>
             </div>
           </div>

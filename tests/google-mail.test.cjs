@@ -1,7 +1,7 @@
 const { test } = require("node:test");
 const assert = require("node:assert/strict");
 const { loadTs } = require("./load-ts.cjs");
-const { exchangeGoogleMailCode, GOOGLE_MAIL_SEND_SCOPE, GOOGLE_MAIL_SCOPES } = loadTs("lib/server/googleMailOAuth.ts");
+const { exchangeGoogleMailCode, googleMailAuthorizationUrl, GOOGLE_MAIL_SEND_SCOPE, GOOGLE_MAIL_SCOPES } = loadTs("lib/server/googleMailOAuth.ts");
 const config = { clientId: "test-client", clientSecret: "test-secret", redirectUri: "https://www.masonandarc.com/api/integrations/google-mail/callback" };
 const granted = { access_token: "test-access", refresh_token: "test-refresh", scope: GOOGLE_MAIL_SCOPES };
 const profile = { email: "test@example.invalid", email_verified: true, sub: "test-subject" };
@@ -18,6 +18,19 @@ test("send-only Gmail consent uses verified OIDC identity, not mailbox read acce
   assert.equal(mock.calls[1].url, "https://openidconnect.googleapis.com/v1/userinfo");
   assert.equal(mock.calls[0].init.body.get("redirect_uri"), config.redirectUri);
   assert.equal(GOOGLE_MAIL_SCOPES, `openid email ${GOOGLE_MAIL_SEND_SCOPE}`);
+});
+test("authorization request re-prompts for consent and keeps previously granted scopes", () => {
+  const url = googleMailAuthorizationUrl({
+    clientId: config.clientId,
+    redirectUri: config.redirectUri,
+    state: "test-state",
+  });
+  assert.equal(url.origin, "https://accounts.google.com");
+  assert.equal(url.searchParams.get("scope"), GOOGLE_MAIL_SCOPES);
+  assert.equal(url.searchParams.get("access_type"), "offline");
+  assert.equal(url.searchParams.get("include_granted_scopes"), "true");
+  assert.equal(url.searchParams.get("prompt"), "consent select_account");
+  assert.equal(url.searchParams.get("state"), "test-state");
 });
 test("rejects missing send permission", async () => {
   const mock = replies({ ...granted, scope: "openid email" });

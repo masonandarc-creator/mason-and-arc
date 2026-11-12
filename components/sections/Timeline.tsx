@@ -5,36 +5,45 @@ import gsap from "gsap";
 
 import Reveal from "@/components/animations/Reveal";
 import Container from "@/components/shared/Container";
+import { useLocale } from "@/components/i18n/LocaleProvider";
 
-const timeline = [
-  {
-    year: "2024",
-    title: "The Beginning",
-    description:
-      "Mason & Arc begins with a simple idea: architecture should connect design, material, and the experience of space.",
+const timelineCopy = {
+  en: {
+    label: "03 — Timeline",
+    title: ["How we", "got here."],
+    items: [
+      { year: "2015", title: "Professional Practice in Italy", description: "The professional experience behind Mason & Arc begins developing in Italy, including contributions to and supervision of major projects." },
+      { year: "2024", title: "A New Chapter in Egypt", description: "Mason & Arc is established in Egypt as a new and independent architectural design studio." },
+      { year: "2025", title: "Design & Development", description: "The studio develops its approach across architecture, interiors, and detailed design development." },
+      { year: "NOW", title: "Looking Forward", description: "A growing body of work shaped by experimentation, collaboration, and a continuous search for better architecture." },
+    ],
   },
-  {
-    year: "2025",
-    title: "Design & Development",
-    description:
-      "The studio expands its approach across architecture, interiors, and detailed design development.",
+  ar: {
+    label: "03 — المسار",
+    title: ["كيف", "وصلنا إلى هنا."],
+    items: [
+      { year: "2015", title: "خبرة مهنية في إيطاليا", description: "بدأت الخبرة المهنية التي تستند إليها Mason & Arc في إيطاليا، وشملت المشاركة في مشروعات كبيرة والإشراف على تنفيذها." },
+      { year: "2024", title: "فصل جديد في مصر", description: "تأسس Mason & Arc في مصر كاستوديو جديد ومستقل للتصميم المعماري." },
+      { year: "2025", title: "التصميم والتطوير", description: "طوّر الاستوديو منهجه عبر العمارة والتصميم الداخلي والتطوير التفصيلي." },
+      { year: "الآن", title: "نحو المستقبل", description: "مجموعة متنامية من الأعمال تتشكل بالتجربة والتعاون والبحث المستمر عن عمارة أفضل." },
+    ],
   },
-  {
-    year: "2026",
-    title: "Building the Vision",
-    description:
-      "Ideas move from the first sketch into carefully considered built spaces.",
+  it: {
+    label: "03 — Percorso",
+    title: ["Come siamo", "arrivati fin qui."],
+    items: [
+      { year: "2015", title: "Esperienza professionale in Italia", description: "Inizia a maturare in Italia l’esperienza professionale che oggi informa Mason & Arc, con il contributo e la supervisione di importanti progetti." },
+      { year: "2024", title: "Un nuovo capitolo in Egitto", description: "Mason & Arc nasce in Egitto come nuovo studio indipendente di progettazione architettonica." },
+      { year: "2025", title: "Progetto e sviluppo", description: "Lo studio sviluppa il proprio approccio tra architettura, interni e sviluppo dettagliato del progetto." },
+      { year: "OGGI", title: "Guardare avanti", description: "Un insieme crescente di lavori, guidato da sperimentazione, collaborazione e ricerca continua di un’architettura migliore." },
+    ],
   },
-  {
-    year: "NOW",
-    title: "Looking Forward",
-    description:
-      "A growing body of work shaped by experimentation, collaboration, and a continuous search for better architecture.",
-  },
-];
+} as const;
 
 export default function Timeline() {
   const sectionRef = useRef<HTMLElement>(null);
+  const { locale } = useLocale();
+  const copy = timelineCopy[locale];
 
   useEffect(() => {
     if (!sectionRef.current) return;
@@ -98,7 +107,7 @@ export default function Timeline() {
                 text-neutral-400
               "
             >
-              03 — Timeline
+              {copy.label}
             </span>
           </Reveal>
 
@@ -116,9 +125,9 @@ export default function Timeline() {
                 xl:text-[135px]
               "
             >
-              How we
+              {copy.title[0]}
               <br />
-              got here.
+              {copy.title[1]}
             </h2>
           </Reveal>
         </div>
@@ -126,7 +135,7 @@ export default function Timeline() {
         {/* TIMELINE */}
 
         <div className="mt-32 border-t border-neutral-300 md:mt-48">
-          {timeline.map((item, index) => (
+          {copy.items.map((item, index) => (
             <div
               key={item.year}
               className="

@@ -29,8 +29,35 @@ const languages: { code: EditorLanguage; label: string; hint: string }[] = [
   { code: "ar", label: "العربية", hint: "RTL" },
   { code: "it", label: "Italiano", hint: "Translation" },
 ];
-const defaultSectionNames = ["Project Overview", "Design Approach", "Concept", "Façade Language", "Spatial Experience", "Drawings", "Visualization", "Material Palette / Details"];
-const defaultSections = (): ContentSection[] => defaultSectionNames.map((title, index) => ({ id: `section-${Date.now().toString(36)}-${index}`, eyebrow: { ...emptyLocalizedText(), en: String(index + 1).padStart(2, "0") }, title: { ...emptyLocalizedText(), en: title }, body: emptyLocalizedText(), hero_statement: emptyLocalizedText(), is_visible: true, layout: title === "Drawings" ? "drawings" : title === "Visualization" ? "gallery" : "editorial", images: [] }));
+const defaultSectionTemplates: Array<{ title: LocalizedText; layout: ContentSection["layout"] }> = [
+  { title: { en: "Project Overview", ar: "نظرة عامة على المشروع", it: "Panoramica del progetto" }, layout: "editorial" },
+  { title: { en: "Concept", ar: "الفكرة التصميمية", it: "Concept" }, layout: "editorial" },
+  { title: { en: "Site & Context", ar: "الموقع والسياق", it: "Sito e contesto" }, layout: "editorial" },
+  { title: { en: "Plans & Sections", ar: "المساقط والقطاعات", it: "Piante e sezioni" }, layout: "drawings" },
+  { title: { en: "Façade Development", ar: "تطوير الواجهات", it: "Sviluppo delle facciate" }, layout: "gallery" },
+  { title: { en: "Spatial Experience", ar: "التجربة المكانية", it: "Esperienza spaziale" }, layout: "gallery" },
+  { title: { en: "Materials & Details", ar: "الخامات والتفاصيل", it: "Materiali e dettagli" }, layout: "gallery" },
+  { title: { en: "Visualization", ar: "التصور المعماري", it: "Visualizzazione" }, layout: "full_bleed" },
+];
+const defaultSections = (): ContentSection[] => defaultSectionTemplates.map((template, index) => ({
+  id: `section-${Date.now().toString(36)}-${index}`,
+  eyebrow: { en: String(index + 1).padStart(2, "0"), ar: String(index + 1).padStart(2, "0"), it: String(index + 1).padStart(2, "0") },
+  title: template.title,
+  body: emptyLocalizedText(),
+  hero_statement: emptyLocalizedText(),
+  is_visible: true,
+  layout: template.layout,
+  images: [],
+}));
+
+const publishingChecklist = [
+  ["Cover", "One strong landscape image for the project card and hero."],
+  ["Overview", "Location, year/status, category, scope, and a concise project summary."],
+  ["Concept", "The design idea, site response, and the project’s defining move."],
+  ["Drawings", "Plans and sections uploaded in the dedicated Drawings layout."],
+  ["Development", "Façade studies, spatial images, materials, details, and renders."],
+  ["Languages", "English first, then Arabic and Italian before publishing."],
+] as const;
 
 const blankProject = (): WebsiteProject => ({
   id: "",
@@ -306,6 +333,23 @@ export default function WebsiteProjectsPage() {
             <div><h2 className="text-lg font-semibold">{project.id ? `Edit ${project.title || "project"}` : "New website project"}</h2><p className="mt-1 text-xs text-white/40">English is the fallback whenever a translation is left empty.</p></div>
             <label className="flex items-center gap-3 self-start rounded-full border border-white/15 px-3 py-2 text-xs sm:self-auto"><input type="checkbox" checked={project.published} onChange={(event) => updateField("published", event.target.checked)} className="h-4 w-4 accent-white" /> Publish on website</label>
           </div>
+
+          {!project.id && (
+            <section className="mb-6 rounded-2xl border border-white/10 bg-black/20 p-4 sm:p-5">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                <div><p className="text-[10px] uppercase tracking-[0.2em] text-white/35">Project publishing kit</p><h3 className="mt-2 text-lg font-semibold">Ready for tonight’s uploads</h3></div>
+                <p className="max-w-sm text-xs leading-5 text-white/40">New projects start as drafts with eight structured, multilingual case-study sections. Nothing is public until Publish is selected.</p>
+              </div>
+              <ol className="mt-5 grid gap-2 sm:grid-cols-2">
+                {publishingChecklist.map(([title, description], index) => (
+                  <li key={title} className="grid grid-cols-[28px_1fr] gap-3 rounded-xl border border-white/10 p-3">
+                    <span className="text-[10px] tracking-[0.18em] text-white/30">{String(index + 1).padStart(2, "0")}</span>
+                    <div><p className="text-sm font-medium text-white/80">{title}</p><p className="mt-1 text-xs leading-5 text-white/40">{description}</p></div>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          )}
 
           <div className="mb-6 flex flex-wrap gap-2 rounded-2xl border border-white/10 bg-black/20 p-2" dir="ltr">
             {languages.map((item) => <button key={item.code} type="button" onClick={() => setLanguage(item.code)} className={`flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl px-3 text-sm transition ${language === item.code ? "bg-white text-black" : "text-white/55 hover:bg-white/5 hover:text-white"}`}><Languages size={14} /><span>{item.label}</span><span className={`hidden text-[9px] uppercase tracking-wider sm:inline ${language === item.code ? "text-black/45" : "text-white/25"}`}>{item.hint}</span></button>)}

@@ -69,6 +69,13 @@ export default function Footer() {
               >
                 {copy.contact}
               </Link>
+
+              <Link
+                href="/privacy"
+                className="transition-opacity hover:opacity-50"
+              >
+                {copy.privacy}
+              </Link>
             </div>
           </div>
 

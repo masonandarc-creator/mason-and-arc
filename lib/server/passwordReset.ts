@@ -5,6 +5,10 @@ import { sendGoogleMail } from "./googleMail";
 
 const hash = (value: string) => createHash("sha256").update(value).digest("hex");
 
+export function passwordResetDeliveryAddress(accountEmail: string) {
+  return accountEmail;
+}
+
 export async function allowAuthAttempt(key: string, limit: number) {
   const result = await query<{ attempts: number }>(
     `INSERT INTO auth_rate_limits (key_hash, attempts, expires_at)
@@ -35,7 +39,7 @@ export async function requestPasswordReset(email: string) {
   link.hash = new URLSearchParams({ token }).toString();
   try {
     await sendGoogleMail({
-      to: user.email,
+      to: passwordResetDeliveryAddress(user.email),
       subject: "Reset your Mason & Arc Studio password",
       text: `A password reset was requested for your Mason & Arc Studio account.\n\nOpen this link within 30 minutes to choose a new password:\n${link.toString()}\n\nThe link can be used once. If you did not request this, ignore this email. Your password has not changed.\n\nMason & Arc Studio`,
     });
