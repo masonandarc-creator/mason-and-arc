@@ -44,12 +44,6 @@ export const servicesContent = {
   },
 } as const;
 
-const permitCardCopy = {
-  en: { eyebrow: "Specialist service / Architecture", title: "Building Permits & Approvals", description: "Regulatory review, technical documentation and application follow-up for residential and commercial projects in Egypt." },
-  ar: { eyebrow: "خدمة متخصصة / العمارة", title: "تراخيص البناء والموافقات", description: "مراجعة الاشتراطات وتجهيز المستندات والرسومات الهندسية ومتابعة إجراءات تراخيص البناء للمشروعات السكنية والتجارية." },
-  it: { eyebrow: "Servizio specialistico / Architettura", title: "Permessi di costruire e autorizzazioni", description: "Verifica normativa, documentazione tecnica e supporto alle pratiche edilizie per progetti residenziali e commerciali in Egitto." },
-} as const;
-
 export const serviceSlugs = [
   "architecture-interiors",
   "branding-creative-direction",
@@ -60,7 +54,7 @@ export const serviceSlugs = [
 export type ServiceSlug = (typeof serviceSlugs)[number];
 
 export default function ServicesHero() {
-  const { locale } = useLocale(); const copy = servicesContent[locale]; const permit = permitCardCopy[locale];
+  const { locale } = useLocale(); const copy = servicesContent[locale];
   return <main className="bg-[#f8f7f4] text-neutral-900">
     <section className="px-6 pb-20 pt-36 sm:px-8 md:px-10 md:pb-24 md:pt-40 lg:px-16 lg:pb-28 lg:pt-44">
       <div className="grid gap-16 lg:grid-cols-[1.05fr_.95fr] lg:items-center lg:gap-20">
@@ -97,17 +91,6 @@ export default function ServicesHero() {
             <span aria-hidden="true" className="pt-1 text-right text-2xl transition-transform group-hover:translate-x-1">↗</span>
           </Link>
         ))}
-      </div>
-      <div className="mx-auto mt-14 max-w-[1600px] border-t border-neutral-300 pt-10 md:mt-20 md:pt-14">
-        <Link href="/services/building-permits" className="group grid gap-6 py-2 transition-colors hover:text-[#4F6B7A] md:grid-cols-[100px_minmax(0,1fr)_40px] md:gap-10">
-          <span className="pt-2 text-[10px] tracking-[.25em] text-[#4F6B7A]">+</span>
-          <div>
-            <p className="text-[9px] uppercase tracking-[.28em] text-neutral-500">{permit.eyebrow}</p>
-            <h3 className={`${locale === "ar" ? "text-[clamp(2rem,4.5vw,3.75rem)]" : "text-[clamp(2rem,4vw,3.5rem)]"} mt-5 font-extralight leading-[1.05] tracking-[-.045em]`}>{permit.title}</h3>
-            <p className="mt-5 max-w-2xl text-base font-light leading-8 text-neutral-600">{permit.description}</p>
-          </div>
-          <span aria-hidden="true" className="text-right text-2xl transition-transform group-hover:translate-x-1">↗</span>
-        </Link>
       </div>
     </section>
     <LetsCreateCTA />

@@ -6,12 +6,6 @@ import LetsCreateCTA from "@/components/shared/LetsCreateCTA";
 import { useLocale } from "@/components/i18n/LocaleProvider";
 import { serviceSlugs, servicesContent, type ServiceSlug } from "@/components/services/ServicesHero";
 
-const permitsLinkCopy = {
-  en: { label: "Related specialist service", title: "Building Permits & Approvals", action: "Explore the service" },
-  ar: { label: "خدمة هندسية متخصصة", title: "تراخيص البناء والموافقات", action: "اكتشف الخدمة" },
-  it: { label: "Servizio specialistico correlato", title: "Permessi di costruire e autorizzazioni", action: "Scopri il servizio" },
-} as const;
-
 const navigationCopy = {
   en: { back: "All services", capabilities: "Capabilities", for: "Who it is for", deliverables: "Typical deliverables", examples: "Where it can lead", specialist: "Specialist offering", cta: "Start a conversation" },
   ar: { back: "كل الخدمات", capabilities: "القدرات", for: "لمن هذه الخدمة", deliverables: "المخرجات المعتادة", examples: "ما الذي يمكن أن تصنعه", specialist: "خدمة متخصصة", cta: "ابدأ محادثة" },
@@ -60,18 +54,6 @@ export default function ServiceDetail({ slug }: { slug: ServiceSlug }) {
           <p className="text-[9px] uppercase tracking-[.3em] text-white/45">{copy.specialist}</p>
           <p className="max-w-4xl text-2xl font-light leading-9 text-white/80 md:text-4xl md:leading-[1.25]">{service.specialist}</p>
         </div>
-        {slug === "architecture-interiors" && (
-          <div className="mx-auto mt-12 max-w-[1600px] border-t border-white/20 pt-10">
-            <Link href="/services/building-permits" className="group grid gap-6 transition-colors hover:text-white md:grid-cols-[120px_minmax(0,1fr)_40px]">
-              <p className="text-[9px] uppercase tracking-[.25em] text-white/45">{permitsLinkCopy[locale].label}</p>
-              <div>
-                <h3 className="text-2xl font-light text-white/85 md:text-4xl">{permitsLinkCopy[locale].title}</h3>
-                <p className="mt-4 text-[10px] uppercase tracking-[.25em] text-white/55">{permitsLinkCopy[locale].action}</p>
-              </div>
-              <span aria-hidden="true" className="text-2xl text-white/70 transition-transform group-hover:translate-x-1">↗</span>
-            </Link>
-          </div>
-        )}
       </section>
 
       <LetsCreateCTA href={`/contact?service=discipline-${index + 1}`} />

@@ -109,6 +109,21 @@ test("services page stays focused and avoids repeating the About timeline", () =
   assert.doesNotMatch(servicesHero, /service\.intro/);
 });
 
+test("building permit services are absent from every public entry point", () => {
+  const servicesHero = read("components/services/ServicesHero.tsx");
+  const serviceDetail = read("components/services/ServiceDetail.tsx");
+  const contact = read("app/contact/ContactForm.tsx");
+  const sitemap = read("app/sitemap.ts");
+  const nextConfig = read("next.config.ts");
+
+  for (const source of [servicesHero, serviceDetail, contact, sitemap, nextConfig]) {
+    assert.doesNotMatch(source, /building[- ]permits?|تراخيص البناء|permessi di costruire/i);
+  }
+  assert.equal(existsSync(path.join(__dirname, "..", "app/services/building-permits/page.tsx")), false);
+  assert.equal(existsSync(path.join(__dirname, "..", "components/services/BuildingPermits.tsx")), false);
+  assert.equal(existsSync(path.join(__dirname, "..", "public/docs/building-permit-reference.pdf")), false);
+});
+
 test("contact hero keeps an editorial scale without overwhelming the details", () => {
   const contactHero = read("components/contact/ContactHero.tsx");
   assert.match(contactHero, /text-\[clamp\(3\.5rem,7vw,6\.5rem\)\]/);
