@@ -131,17 +131,17 @@ export default function Footer() {
 
         {/* Copyright: separate left/right alignment with consistent optical weight */}
         <div className="mt-12 flex flex-col items-start gap-3 border-t border-neutral-300 pt-4 text-[11px] font-normal leading-5 tracking-[-0.01em] text-neutral-500 md:mt-14 md:flex-row md:items-center md:justify-between md:gap-6">
-          <div dir="ltr" className="inline-flex flex-nowrap items-baseline gap-[6px] whitespace-nowrap text-[11px] leading-none">
-            <span className="whitespace-nowrap">© 2026</span>
+          <p dir="ltr" className="text-[11px] font-normal leading-5 tracking-[-0.01em] text-neutral-500">
+            © 2026{" "}
             <Link
               href="/"
               aria-label="Mason&Arc home"
-              className="whitespace-nowrap font-medium tracking-[-0.025em] text-neutral-600 transition-opacity hover:opacity-70"
+              className="font-normal text-inherit transition-opacity hover:opacity-70"
             >
               Mason&Arc
-            </Link>
-            <span lang={locale} dir={locale === "ar" ? "rtl" : "ltr"} className="whitespace-nowrap">{copy.rights}</span>
-          </div>
+            </Link>{" "}
+            <span lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>{copy.rights}</span>
+          </p>
           <span lang={locale} dir={locale === "ar" ? "rtl" : "ltr"} className="text-neutral-500 text-start md:text-end">
             {copy.heroBuild} {copy.heroExperience}
           </span>
