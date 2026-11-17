@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLocale } from "@/components/i18n/LocaleProvider";
@@ -136,16 +135,10 @@ export default function Footer() {
             <span className="whitespace-nowrap">© 2026</span>
             <Link
               href="/"
-              aria-label="Mason & Arc home"
-              className="relative top-px inline-block h-[11px] shrink-0 align-baseline transition-opacity hover:opacity-70"
+              aria-label="Mason&Arc home"
+              className="whitespace-nowrap font-medium tracking-[-0.025em] text-neutral-600 transition-opacity hover:opacity-70"
             >
-              <Image
-                src="/images/logo-mason-arc.png"
-                alt=""
-                width={500}
-                height={160}
-                className="block h-[11px] w-auto shrink-0 object-contain brightness-0 opacity-[0.48]"
-              />
+              Mason&Arc
             </Link>
             <span lang={locale} dir={locale === "ar" ? "rtl" : "ltr"} className="whitespace-nowrap">{copy.rights}</span>
           </div>
